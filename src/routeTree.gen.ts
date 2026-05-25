@@ -18,6 +18,7 @@ import { Route as IndexRouteImport } from './routes/index'
 import { Route as AppIndexRouteImport } from './routes/app/index'
 import { Route as AppLearnVoiceCallRouteImport } from './routes/app/learn/voice-call'
 import { Route as AppLearnVoiceRouteImport } from './routes/app/learn/voice'
+import { Route as AppLearnVideoCallRouteImport } from './routes/app/learn/video-call'
 import { Route as AppLearnTextRouteImport } from './routes/app/learn/text'
 
 const SignupRoute = SignupRouteImport.update({
@@ -65,6 +66,11 @@ const AppLearnVoiceRoute = AppLearnVoiceRouteImport.update({
   path: '/learn/voice',
   getParentRoute: () => AppRoute,
 } as any)
+const AppLearnVideoCallRoute = AppLearnVideoCallRouteImport.update({
+  id: '/learn/video-call',
+  path: '/learn/video-call',
+  getParentRoute: () => AppRoute,
+} as any)
 const AppLearnTextRoute = AppLearnTextRouteImport.update({
   id: '/learn/text',
   path: '/learn/text',
@@ -80,6 +86,7 @@ export interface FileRoutesByFullPath {
   '/signup': typeof SignupRoute
   '/app/': typeof AppIndexRoute
   '/app/learn/text': typeof AppLearnTextRoute
+  '/app/learn/video-call': typeof AppLearnVideoCallRoute
   '/app/learn/voice': typeof AppLearnVoiceRoute
   '/app/learn/voice-call': typeof AppLearnVoiceCallRoute
 }
@@ -91,6 +98,7 @@ export interface FileRoutesByTo {
   '/signup': typeof SignupRoute
   '/app': typeof AppIndexRoute
   '/app/learn/text': typeof AppLearnTextRoute
+  '/app/learn/video-call': typeof AppLearnVideoCallRoute
   '/app/learn/voice': typeof AppLearnVoiceRoute
   '/app/learn/voice-call': typeof AppLearnVoiceCallRoute
 }
@@ -104,6 +112,7 @@ export interface FileRoutesById {
   '/signup': typeof SignupRoute
   '/app/': typeof AppIndexRoute
   '/app/learn/text': typeof AppLearnTextRoute
+  '/app/learn/video-call': typeof AppLearnVideoCallRoute
   '/app/learn/voice': typeof AppLearnVoiceRoute
   '/app/learn/voice-call': typeof AppLearnVoiceCallRoute
 }
@@ -118,6 +127,7 @@ export interface FileRouteTypes {
     | '/signup'
     | '/app/'
     | '/app/learn/text'
+    | '/app/learn/video-call'
     | '/app/learn/voice'
     | '/app/learn/voice-call'
   fileRoutesByTo: FileRoutesByTo
@@ -129,6 +139,7 @@ export interface FileRouteTypes {
     | '/signup'
     | '/app'
     | '/app/learn/text'
+    | '/app/learn/video-call'
     | '/app/learn/voice'
     | '/app/learn/voice-call'
   id:
@@ -141,6 +152,7 @@ export interface FileRouteTypes {
     | '/signup'
     | '/app/'
     | '/app/learn/text'
+    | '/app/learn/video-call'
     | '/app/learn/voice'
     | '/app/learn/voice-call'
   fileRoutesById: FileRoutesById
@@ -219,6 +231,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AppLearnVoiceRouteImport
       parentRoute: typeof AppRoute
     }
+    '/app/learn/video-call': {
+      id: '/app/learn/video-call'
+      path: '/learn/video-call'
+      fullPath: '/app/learn/video-call'
+      preLoaderRoute: typeof AppLearnVideoCallRouteImport
+      parentRoute: typeof AppRoute
+    }
     '/app/learn/text': {
       id: '/app/learn/text'
       path: '/learn/text'
@@ -232,6 +251,7 @@ declare module '@tanstack/react-router' {
 interface AppRouteChildren {
   AppIndexRoute: typeof AppIndexRoute
   AppLearnTextRoute: typeof AppLearnTextRoute
+  AppLearnVideoCallRoute: typeof AppLearnVideoCallRoute
   AppLearnVoiceRoute: typeof AppLearnVoiceRoute
   AppLearnVoiceCallRoute: typeof AppLearnVoiceCallRoute
 }
@@ -239,6 +259,7 @@ interface AppRouteChildren {
 const AppRouteChildren: AppRouteChildren = {
   AppIndexRoute: AppIndexRoute,
   AppLearnTextRoute: AppLearnTextRoute,
+  AppLearnVideoCallRoute: AppLearnVideoCallRoute,
   AppLearnVoiceRoute: AppLearnVoiceRoute,
   AppLearnVoiceCallRoute: AppLearnVoiceCallRoute,
 }
