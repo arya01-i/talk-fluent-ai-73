@@ -2,7 +2,7 @@ import { createFileRoute, Outlet, Link, useNavigate, useRouterState } from "@tan
 import { useEffect, useState } from "react";
 import { supabase } from "@/integrations/supabase/client";
 import { Button } from "@/components/ui/button";
-import { Sparkles, LayoutDashboard, MessageSquare, Mic, Phone, Video, BookOpen, ListChecks, Settings, LogOut } from "lucide-react";
+import { Sparkles, LayoutDashboard, MessageSquare, Mic, Phone, Video, BookOpen, ListChecks, Settings, LogOut, GraduationCap } from "lucide-react";
 import { cn } from "@/lib/utils";
 
 export const Route = createFileRoute("/app")({
@@ -12,6 +12,7 @@ export const Route = createFileRoute("/app")({
 type NavItem = { to: string; label: string; icon: typeof LayoutDashboard; exact?: boolean };
 const NAV: NavItem[] = [
   { to: "/app", label: "Dashboard", icon: LayoutDashboard, exact: true },
+  { to: "/app/learn/lessons", label: "Lessons", icon: GraduationCap },
   { to: "/app/learn/text", label: "Text chat", icon: MessageSquare },
   { to: "/app/learn/voice", label: "Voice practice", icon: Mic },
   { to: "/app/learn/voice-call", label: "Voice call", icon: Phone },
