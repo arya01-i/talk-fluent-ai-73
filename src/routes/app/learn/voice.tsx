@@ -7,7 +7,7 @@ import { createRecognizer, speak, speechSupported, stopSpeaking } from "@/lib/sp
 import { toast } from "sonner";
 
 export const Route = createFileRoute("/app/learn/voice")({
-  head: () => ({ meta: [{ title: "Voice practice — Anya" }] }),
+  head: () => ({ meta: [{ title: "Voice practice — Lingvo" }] }),
   component: VoicePage,
 });
 
@@ -36,7 +36,7 @@ function VoicePage() {
     <div className="flex flex-col h-full max-w-3xl mx-auto w-full">
       <div className="px-4 pt-4 pb-2 border-b">
         <h1 className="font-semibold text-lg">Voice practice</h1>
-        <p className="text-xs text-muted-foreground">Tap the mic, speak a phrase, Anya replies aloud.</p>
+        <p className="text-xs text-muted-foreground">Tap the mic, speak a phrase, Lingvo replies aloud.</p>
       </div>
       <MessageList messages={messages} busy={busy} />
       <div className="border-t p-4 flex items-center justify-center gap-3 bg-card">

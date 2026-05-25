@@ -7,7 +7,7 @@ import { createRecognizer, speak, speechSupported, stopSpeaking } from "@/lib/sp
 import { toast } from "sonner";
 
 export const Route = createFileRoute("/app/learn/video-call")({
-  head: () => ({ meta: [{ title: "Video avatar — Anya" }] }),
+  head: () => ({ meta: [{ title: "Video avatar — Lingvo" }] }),
   component: VideoCallPage,
 });
 
@@ -31,7 +31,7 @@ function VideoCallPage() {
       const reply = await send(text);
       if (!activeRef.current) return;
       if (reply) {
-        setStatus("Anya is speaking…"); setSpeaking(true);
+        setStatus("Lingvo is speaking…"); setSpeaking(true);
         speak(reply, profile.learning_lang, () => { setSpeaking(false); if (activeRef.current) loop(); });
       } else { loop(); }
     };
@@ -51,7 +51,7 @@ function VideoCallPage() {
 
   return (
     <div className="max-w-3xl mx-auto p-6">
-      <h1 className="font-semibold text-2xl mb-1 text-center">Video call with Anya</h1>
+      <h1 className="font-semibold text-2xl mb-1 text-center">Video call with Lingvo</h1>
       <p className="text-sm text-muted-foreground mb-6 text-center">An animated tutor that lip-syncs while she speaks.</p>
       <div className="aspect-video bg-gradient-to-br from-primary/20 to-accent/20 rounded-2xl flex items-center justify-center mb-6">
         <Avatar speaking={speaking} active={active} />

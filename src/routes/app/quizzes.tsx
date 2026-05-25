@@ -6,7 +6,7 @@ import { Card } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 
 export const Route = createFileRoute("/app/quizzes")({
-  head: () => ({ meta: [{ title: "Quizzes — Anya" }] }),
+  head: () => ({ meta: [{ title: "Quizzes — Lingvo" }] }),
   component: QuizPage,
 });
 

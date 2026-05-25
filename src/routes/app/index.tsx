@@ -8,7 +8,7 @@ import { useEffect, useState } from "react";
 import { supabase } from "@/integrations/supabase/client";
 
 export const Route = createFileRoute("/app/")({
-  head: () => ({ meta: [{ title: "Dashboard — Anya" }] }),
+  head: () => ({ meta: [{ title: "Dashboard — Lingvo" }] }),
   component: Dashboard,
 });
 
@@ -70,12 +70,12 @@ function Dashboard() {
       </div>
 
       <div>
-        <h2 className="font-semibold text-lg mb-3">Practice with Anya</h2>
+        <h2 className="font-semibold text-lg mb-3">Practice with Lingvo</h2>
         <div className="grid sm:grid-cols-2 gap-4">
           <Tile to="/app/learn/text" title="Text chat" desc="Type with your tutor. Get corrections and translations." icon={<MessageSquare />} accent />
-          <Tile to="/app/learn/voice" title="Voice practice" desc="Speak a phrase and hear Anya's reply." icon={<Mic />} />
+          <Tile to="/app/learn/voice" title="Voice practice" desc="Speak a phrase and hear Lingvo's reply." icon={<Mic />} />
           <Tile to="/app/learn/voice-call" title="Voice call" desc="Hands-free conversation with auto turns." icon={<Phone />} />
-          <Tile to="/app/learn/video-call" title="Video avatar" desc="Talk to an animated Anya that lip-syncs." icon={<Video />} />
+          <Tile to="/app/learn/video-call" title="Video avatar" desc="Talk to an animated Lingvo that lip-syncs." icon={<Video />} />
         </div>
       </div>
 

@@ -8,7 +8,7 @@ import { Volume2, Check } from "lucide-react";
 import { speak } from "@/lib/speech";
 
 export const Route = createFileRoute("/app/vocabulary")({
-  head: () => ({ meta: [{ title: "Vocabulary — Anya" }] }),
+  head: () => ({ meta: [{ title: "Vocabulary — Lingvo" }] }),
   component: VocabPage,
 });
 

@@ -7,7 +7,7 @@ import { createRecognizer, speak, speechSupported, stopSpeaking } from "@/lib/sp
 import { toast } from "sonner";
 
 export const Route = createFileRoute("/app/learn/voice-call")({
-  head: () => ({ meta: [{ title: "Voice call — Anya" }] }),
+  head: () => ({ meta: [{ title: "Voice call — Lingvo" }] }),
   component: VoiceCallPage,
 });
 
@@ -30,7 +30,7 @@ function VoiceCallPage() {
       const reply = await send(text);
       if (!activeRef.current) return;
       if (reply) {
-        setStatus("Anya is speaking…");
+        setStatus("Lingvo is speaking…");
         speak(reply, profile.learning_lang, () => { if (activeRef.current) loop(); });
       } else { loop(); }
     };
@@ -51,8 +51,8 @@ function VoiceCallPage() {
 
   return (
     <div className="max-w-2xl mx-auto p-6 flex flex-col items-center text-center">
-      <h1 className="font-semibold text-2xl mb-1">Voice call with Anya</h1>
-      <p className="text-sm text-muted-foreground mb-8">Hands-free. Anya listens, replies, then listens again.</p>
+      <h1 className="font-semibold text-2xl mb-1">Voice call with Lingvo</h1>
+      <p className="text-sm text-muted-foreground mb-8">Hands-free. Lingvo listens, replies, then listens again.</p>
       <div className={`size-40 rounded-full mb-6 flex items-center justify-center text-4xl font-bold transition ${active ? "bg-primary text-primary-foreground animate-pulse" : "bg-secondary"}`}>A</div>
       <div className="text-sm text-muted-foreground mb-6">{active ? status : "Tap to call"}</div>
       {!active ? (

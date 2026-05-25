@@ -8,7 +8,7 @@ import { toast } from "sonner";
 import { AuthShell } from "./login";
 
 export const Route = createFileRoute("/signup")({
-  head: () => ({ meta: [{ title: "Sign up — Anya" }] }),
+  head: () => ({ meta: [{ title: "Sign up — Lingvo" }] }),
   component: SignupPage,
 });
 

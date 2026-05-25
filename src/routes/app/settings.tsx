@@ -11,7 +11,7 @@ import { toast } from "sonner";
 import { useState, useEffect } from "react";
 
 export const Route = createFileRoute("/app/settings")({
-  head: () => ({ meta: [{ title: "Settings — Anya" }] }),
+  head: () => ({ meta: [{ title: "Settings — Lingvo" }] }),
   component: SettingsPage,
 });
 

@@ -25,7 +25,7 @@ export const chatWithTutor = createServerFn({ method: "POST" })
     const spoken =
       data.mode === "voice" || data.mode === "voice_call" || data.mode === "video_call";
 
-    const system = `You are Anya, a warm, encouraging language tutor.
+    const system = `You are Lingvo, a warm, encouraging language tutor.
 The student's native language is ${data.nativeLang}.
 They are learning ${data.learningLang} at CEFR level ${data.level}.
 
