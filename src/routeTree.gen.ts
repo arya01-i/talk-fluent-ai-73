@@ -16,6 +16,7 @@ import { Route as ForgotPasswordRouteImport } from './routes/forgot-password'
 import { Route as AppRouteImport } from './routes/app'
 import { Route as IndexRouteImport } from './routes/index'
 import { Route as AppIndexRouteImport } from './routes/app/index'
+import { Route as AppLearnVoiceRouteImport } from './routes/app/learn/voice'
 import { Route as AppLearnTextRouteImport } from './routes/app/learn/text'
 
 const SignupRoute = SignupRouteImport.update({
@@ -53,6 +54,11 @@ const AppIndexRoute = AppIndexRouteImport.update({
   path: '/',
   getParentRoute: () => AppRoute,
 } as any)
+const AppLearnVoiceRoute = AppLearnVoiceRouteImport.update({
+  id: '/learn/voice',
+  path: '/learn/voice',
+  getParentRoute: () => AppRoute,
+} as any)
 const AppLearnTextRoute = AppLearnTextRouteImport.update({
   id: '/learn/text',
   path: '/learn/text',
@@ -68,6 +74,7 @@ export interface FileRoutesByFullPath {
   '/signup': typeof SignupRoute
   '/app/': typeof AppIndexRoute
   '/app/learn/text': typeof AppLearnTextRoute
+  '/app/learn/voice': typeof AppLearnVoiceRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
@@ -77,6 +84,7 @@ export interface FileRoutesByTo {
   '/signup': typeof SignupRoute
   '/app': typeof AppIndexRoute
   '/app/learn/text': typeof AppLearnTextRoute
+  '/app/learn/voice': typeof AppLearnVoiceRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
@@ -88,6 +96,7 @@ export interface FileRoutesById {
   '/signup': typeof SignupRoute
   '/app/': typeof AppIndexRoute
   '/app/learn/text': typeof AppLearnTextRoute
+  '/app/learn/voice': typeof AppLearnVoiceRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
@@ -100,6 +109,7 @@ export interface FileRouteTypes {
     | '/signup'
     | '/app/'
     | '/app/learn/text'
+    | '/app/learn/voice'
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
@@ -109,6 +119,7 @@ export interface FileRouteTypes {
     | '/signup'
     | '/app'
     | '/app/learn/text'
+    | '/app/learn/voice'
   id:
     | '__root__'
     | '/'
@@ -119,6 +130,7 @@ export interface FileRouteTypes {
     | '/signup'
     | '/app/'
     | '/app/learn/text'
+    | '/app/learn/voice'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
@@ -181,6 +193,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AppIndexRouteImport
       parentRoute: typeof AppRoute
     }
+    '/app/learn/voice': {
+      id: '/app/learn/voice'
+      path: '/learn/voice'
+      fullPath: '/app/learn/voice'
+      preLoaderRoute: typeof AppLearnVoiceRouteImport
+      parentRoute: typeof AppRoute
+    }
     '/app/learn/text': {
       id: '/app/learn/text'
       path: '/learn/text'
@@ -194,11 +213,13 @@ declare module '@tanstack/react-router' {
 interface AppRouteChildren {
   AppIndexRoute: typeof AppIndexRoute
   AppLearnTextRoute: typeof AppLearnTextRoute
+  AppLearnVoiceRoute: typeof AppLearnVoiceRoute
 }
 
 const AppRouteChildren: AppRouteChildren = {
   AppIndexRoute: AppIndexRoute,
   AppLearnTextRoute: AppLearnTextRoute,
+  AppLearnVoiceRoute: AppLearnVoiceRoute,
 }
 
 const AppRouteWithChildren = AppRoute._addFileChildren(AppRouteChildren)
