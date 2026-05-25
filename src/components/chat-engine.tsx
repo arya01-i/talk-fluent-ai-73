@@ -52,7 +52,7 @@ export function MessageList({ messages, busy }: { messages: Msg[]; busy: boolean
   return (
     <div ref={ref} className="flex-1 overflow-y-auto space-y-3 p-4">
       {messages.length === 0 && (
-        <div className="text-center text-muted-foreground py-12 text-sm">Say hi to Anya to start practicing.</div>
+        <div className="text-center text-muted-foreground py-12 text-sm">Say hi to Lingvo to start practicing.</div>
       )}
       {messages.map((m, i) => (
         <div key={i} className={m.role === "user" ? "flex justify-end" : "flex justify-start"}>

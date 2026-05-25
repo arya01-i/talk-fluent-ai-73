@@ -10,8 +10,8 @@ import { MessageSquare, Mic, Phone, Video, BookOpen, Sparkles } from "lucide-rea
 export const Route = createFileRoute("/")({
   head: () => ({
     meta: [
-      { title: "Anya — Learn any language with an AI tutor" },
-      { name: "description", content: "Practice speaking, listening, vocabulary and quizzes with Anya, your CEFR A1–C2 AI language tutor." },
+      { title: "Lingvo — Learn any language with an AI tutor" },
+      { name: "description", content: "Practice speaking, listening, vocabulary and quizzes with Lingvo, your CEFR A1–C2 AI language tutor." },
     ],
   }),
   component: Landing,
@@ -38,7 +38,7 @@ function Landing() {
     <div className="min-h-screen bg-background text-foreground">
       <header className="px-6 py-5 flex justify-between items-center max-w-6xl mx-auto">
         <Link to="/" className="flex items-center gap-2 font-bold text-xl">
-          <Sparkles className="size-5 text-primary" /> Anya
+          <Sparkles className="size-5 text-primary" /> Lingvo
         </Link>
         <div className="flex gap-2">
           <Button variant="ghost" asChild><Link to="/login">Log in</Link></Button>
@@ -50,7 +50,7 @@ function Landing() {
         <section className="grid md:grid-cols-2 gap-12 items-center">
           <div>
             <h1 className="text-5xl md:text-6xl font-bold tracking-tight leading-[1.05]">
-              Speak a new language — with <span className="text-primary">Anya</span>.
+              Speak a new language — with <span className="text-primary">Lingvo</span>.
             </h1>
             <p className="mt-6 text-lg text-muted-foreground max-w-md">
               Your AI tutor for text chat, voice calls, and a friendly video avatar. Vocabulary, quizzes, and lessons from A1 to C2.

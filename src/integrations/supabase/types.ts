@@ -79,6 +79,80 @@ export type Database = {
         }
         Relationships: []
       }
+      lesson_progress: {
+        Row: {
+          completed_at: string | null
+          lesson_id: string
+          passed: boolean
+          score: number
+          total: number
+          updated_at: string
+          user_id: string
+        }
+        Insert: {
+          completed_at?: string | null
+          lesson_id: string
+          passed?: boolean
+          score?: number
+          total?: number
+          updated_at?: string
+          user_id: string
+        }
+        Update: {
+          completed_at?: string | null
+          lesson_id?: string
+          passed?: boolean
+          score?: number
+          total?: number
+          updated_at?: string
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "lesson_progress_lesson_id_fkey"
+            columns: ["lesson_id"]
+            isOneToOne: false
+            referencedRelation: "lessons"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      lessons: {
+        Row: {
+          created_at: string
+          exam: Json
+          id: string
+          lang: string
+          level: Database["public"]["Enums"]["cefr_level"]
+          order_index: number
+          sections: Json
+          summary: string | null
+          title: string
+        }
+        Insert: {
+          created_at?: string
+          exam?: Json
+          id?: string
+          lang: string
+          level: Database["public"]["Enums"]["cefr_level"]
+          order_index: number
+          sections?: Json
+          summary?: string | null
+          title: string
+        }
+        Update: {
+          created_at?: string
+          exam?: Json
+          id?: string
+          lang?: string
+          level?: Database["public"]["Enums"]["cefr_level"]
+          order_index?: number
+          sections?: Json
+          summary?: string | null
+          title?: string
+        }
+        Relationships: []
+      }
       profiles: {
         Row: {
           created_at: string

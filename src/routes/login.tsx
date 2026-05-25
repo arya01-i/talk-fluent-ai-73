@@ -9,7 +9,7 @@ import { toast } from "sonner";
 import { Sparkles, Eye, EyeOff } from "lucide-react";
 
 export const Route = createFileRoute("/login")({
-  head: () => ({ meta: [{ title: "Log in — Anya" }] }),
+  head: () => ({ meta: [{ title: "Log in — Lingvo" }] }),
   component: LoginPage,
 });
 
@@ -69,7 +69,7 @@ export function AuthShell({ title, children }: { title: string; children: React.
     <div className="min-h-screen flex items-center justify-center bg-background px-4">
       <Card className="w-full max-w-md p-8">
         <Link to="/" className="flex items-center justify-center gap-2 font-bold text-xl mb-6">
-          <Sparkles className="size-5 text-primary" /> Anya
+          <Sparkles className="size-5 text-primary" /> Lingvo
         </Link>
         <h1 className="text-2xl font-semibold text-center mb-6">{title}</h1>
         {children}

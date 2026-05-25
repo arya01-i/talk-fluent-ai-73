@@ -23,6 +23,8 @@ import { Route as AppLearnVoiceCallRouteImport } from './routes/app/learn/voice-
 import { Route as AppLearnVoiceRouteImport } from './routes/app/learn/voice'
 import { Route as AppLearnVideoCallRouteImport } from './routes/app/learn/video-call'
 import { Route as AppLearnTextRouteImport } from './routes/app/learn/text'
+import { Route as AppLearnLessonsRouteImport } from './routes/app/learn/lessons'
+import { Route as AppLearnLessonsIndexRouteImport } from './routes/app/learn/lessons.$index'
 
 const SignupRoute = SignupRouteImport.update({
   id: '/signup',
@@ -94,6 +96,16 @@ const AppLearnTextRoute = AppLearnTextRouteImport.update({
   path: '/learn/text',
   getParentRoute: () => AppRoute,
 } as any)
+const AppLearnLessonsRoute = AppLearnLessonsRouteImport.update({
+  id: '/learn/lessons',
+  path: '/learn/lessons',
+  getParentRoute: () => AppRoute,
+} as any)
+const AppLearnLessonsIndexRoute = AppLearnLessonsIndexRouteImport.update({
+  id: '/$index',
+  path: '/$index',
+  getParentRoute: () => AppLearnLessonsRoute,
+} as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
@@ -106,10 +118,12 @@ export interface FileRoutesByFullPath {
   '/app/settings': typeof AppSettingsRoute
   '/app/vocabulary': typeof AppVocabularyRoute
   '/app/': typeof AppIndexRoute
+  '/app/learn/lessons': typeof AppLearnLessonsRouteWithChildren
   '/app/learn/text': typeof AppLearnTextRoute
   '/app/learn/video-call': typeof AppLearnVideoCallRoute
   '/app/learn/voice': typeof AppLearnVoiceRoute
   '/app/learn/voice-call': typeof AppLearnVoiceCallRoute
+  '/app/learn/lessons/$index': typeof AppLearnLessonsIndexRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
@@ -121,10 +135,12 @@ export interface FileRoutesByTo {
   '/app/settings': typeof AppSettingsRoute
   '/app/vocabulary': typeof AppVocabularyRoute
   '/app': typeof AppIndexRoute
+  '/app/learn/lessons': typeof AppLearnLessonsRouteWithChildren
   '/app/learn/text': typeof AppLearnTextRoute
   '/app/learn/video-call': typeof AppLearnVideoCallRoute
   '/app/learn/voice': typeof AppLearnVoiceRoute
   '/app/learn/voice-call': typeof AppLearnVoiceCallRoute
+  '/app/learn/lessons/$index': typeof AppLearnLessonsIndexRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
@@ -138,10 +154,12 @@ export interface FileRoutesById {
   '/app/settings': typeof AppSettingsRoute
   '/app/vocabulary': typeof AppVocabularyRoute
   '/app/': typeof AppIndexRoute
+  '/app/learn/lessons': typeof AppLearnLessonsRouteWithChildren
   '/app/learn/text': typeof AppLearnTextRoute
   '/app/learn/video-call': typeof AppLearnVideoCallRoute
   '/app/learn/voice': typeof AppLearnVoiceRoute
   '/app/learn/voice-call': typeof AppLearnVoiceCallRoute
+  '/app/learn/lessons/$index': typeof AppLearnLessonsIndexRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
@@ -156,10 +174,12 @@ export interface FileRouteTypes {
     | '/app/settings'
     | '/app/vocabulary'
     | '/app/'
+    | '/app/learn/lessons'
     | '/app/learn/text'
     | '/app/learn/video-call'
     | '/app/learn/voice'
     | '/app/learn/voice-call'
+    | '/app/learn/lessons/$index'
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
@@ -171,10 +191,12 @@ export interface FileRouteTypes {
     | '/app/settings'
     | '/app/vocabulary'
     | '/app'
+    | '/app/learn/lessons'
     | '/app/learn/text'
     | '/app/learn/video-call'
     | '/app/learn/voice'
     | '/app/learn/voice-call'
+    | '/app/learn/lessons/$index'
   id:
     | '__root__'
     | '/'
@@ -187,10 +209,12 @@ export interface FileRouteTypes {
     | '/app/settings'
     | '/app/vocabulary'
     | '/app/'
+    | '/app/learn/lessons'
     | '/app/learn/text'
     | '/app/learn/video-call'
     | '/app/learn/voice'
     | '/app/learn/voice-call'
+    | '/app/learn/lessons/$index'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
@@ -302,14 +326,41 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AppLearnTextRouteImport
       parentRoute: typeof AppRoute
     }
+    '/app/learn/lessons': {
+      id: '/app/learn/lessons'
+      path: '/learn/lessons'
+      fullPath: '/app/learn/lessons'
+      preLoaderRoute: typeof AppLearnLessonsRouteImport
+      parentRoute: typeof AppRoute
+    }
+    '/app/learn/lessons/$index': {
+      id: '/app/learn/lessons/$index'
+      path: '/$index'
+      fullPath: '/app/learn/lessons/$index'
+      preLoaderRoute: typeof AppLearnLessonsIndexRouteImport
+      parentRoute: typeof AppLearnLessonsRoute
+    }
   }
 }
+
+interface AppLearnLessonsRouteChildren {
+  AppLearnLessonsIndexRoute: typeof AppLearnLessonsIndexRoute
+}
+
+const AppLearnLessonsRouteChildren: AppLearnLessonsRouteChildren = {
+  AppLearnLessonsIndexRoute: AppLearnLessonsIndexRoute,
+}
+
+const AppLearnLessonsRouteWithChildren = AppLearnLessonsRoute._addFileChildren(
+  AppLearnLessonsRouteChildren,
+)
 
 interface AppRouteChildren {
   AppQuizzesRoute: typeof AppQuizzesRoute
   AppSettingsRoute: typeof AppSettingsRoute
   AppVocabularyRoute: typeof AppVocabularyRoute
   AppIndexRoute: typeof AppIndexRoute
+  AppLearnLessonsRoute: typeof AppLearnLessonsRouteWithChildren
   AppLearnTextRoute: typeof AppLearnTextRoute
   AppLearnVideoCallRoute: typeof AppLearnVideoCallRoute
   AppLearnVoiceRoute: typeof AppLearnVoiceRoute
@@ -321,6 +372,7 @@ const AppRouteChildren: AppRouteChildren = {
   AppSettingsRoute: AppSettingsRoute,
   AppVocabularyRoute: AppVocabularyRoute,
   AppIndexRoute: AppIndexRoute,
+  AppLearnLessonsRoute: AppLearnLessonsRouteWithChildren,
   AppLearnTextRoute: AppLearnTextRoute,
   AppLearnVideoCallRoute: AppLearnVideoCallRoute,
   AppLearnVoiceRoute: AppLearnVoiceRoute,
@@ -340,13 +392,3 @@ const rootRouteChildren: RootRouteChildren = {
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
   ._addFileTypes<FileRouteTypes>()
-
-import type { getRouter } from './router.tsx'
-import type { startInstance } from './start.ts'
-declare module '@tanstack/react-start' {
-  interface Register {
-    ssr: true
-    router: Awaited<ReturnType<typeof getRouter>>
-    config: Awaited<ReturnType<typeof startInstance.getOptions>>
-  }
-}

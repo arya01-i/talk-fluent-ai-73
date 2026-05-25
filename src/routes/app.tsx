@@ -2,7 +2,7 @@ import { createFileRoute, Outlet, Link, useNavigate, useRouterState } from "@tan
 import { useEffect, useState } from "react";
 import { supabase } from "@/integrations/supabase/client";
 import { Button } from "@/components/ui/button";
-import { Sparkles, LayoutDashboard, MessageSquare, Mic, Phone, Video, BookOpen, ListChecks, Settings, LogOut } from "lucide-react";
+import { Sparkles, LayoutDashboard, MessageSquare, Mic, Phone, Video, BookOpen, ListChecks, Settings, LogOut, GraduationCap } from "lucide-react";
 import { cn } from "@/lib/utils";
 
 export const Route = createFileRoute("/app")({
@@ -12,6 +12,7 @@ export const Route = createFileRoute("/app")({
 type NavItem = { to: string; label: string; icon: typeof LayoutDashboard; exact?: boolean };
 const NAV: NavItem[] = [
   { to: "/app", label: "Dashboard", icon: LayoutDashboard, exact: true },
+  { to: "/app/learn/lessons", label: "Lessons", icon: GraduationCap },
   { to: "/app/learn/text", label: "Text chat", icon: MessageSquare },
   { to: "/app/learn/voice", label: "Voice practice", icon: Mic },
   { to: "/app/learn/voice-call", label: "Voice call", icon: Phone },
@@ -47,7 +48,7 @@ function AuthLayout() {
     <div className="min-h-screen flex bg-background">
       <aside className="hidden md:flex w-60 flex-col border-r bg-card">
         <Link to="/app" className="flex items-center gap-2 font-bold text-xl px-5 py-5">
-          <Sparkles className="size-5 text-primary" /> Anya
+          <Sparkles className="size-5 text-primary" /> Lingvo
         </Link>
         <nav className="flex-1 px-3 space-y-1">
           {NAV.map((n) => {
@@ -69,7 +70,7 @@ function AuthLayout() {
       </aside>
       <div className="flex-1 flex flex-col min-w-0">
         <header className="md:hidden flex items-center justify-between border-b px-4 py-3 bg-card">
-          <Link to="/app" className="flex items-center gap-2 font-bold"><Sparkles className="size-5 text-primary" /> Anya</Link>
+          <Link to="/app" className="flex items-center gap-2 font-bold"><Sparkles className="size-5 text-primary" /> Lingvo</Link>
           <Button size="sm" variant="ghost" onClick={logout}><LogOut className="size-4" /></Button>
         </header>
         <main className="flex-1 overflow-auto"><Outlet /></main>
