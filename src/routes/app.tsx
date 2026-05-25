@@ -5,7 +5,7 @@ import { Button } from "@/components/ui/button";
 import { Sparkles, LayoutDashboard, MessageSquare, Mic, Phone, Video, BookOpen, ListChecks, Settings, LogOut } from "lucide-react";
 import { cn } from "@/lib/utils";
 
-export const Route = createFileRoute("/_authenticated")({
+export const Route = createFileRoute("/app")({
   component: AuthLayout,
 });
 
