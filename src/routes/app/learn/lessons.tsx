@@ -76,8 +76,8 @@ function LessonsPage() {
               key={n}
               to="/app/learn/lessons/$index"
               params={{ index: String(n) }}
-              disabled={!unlocked}
               className={`block ${!unlocked ? "pointer-events-none" : ""}`}
+              aria-disabled={!unlocked}
             >
               <Card className={`p-4 flex items-center gap-4 transition ${unlocked ? "hover:shadow-md" : "opacity-60"}`}>
                 <div className={`size-10 rounded-full flex items-center justify-center font-bold ${passed ? "bg-primary text-primary-foreground" : "bg-secondary"}`}>
