@@ -7,7 +7,7 @@ import { MessageSquare, Mic, Phone, Video, BookOpen, ListChecks, Flame, Trophy }
 import { useEffect, useState } from "react";
 import { supabase } from "@/integrations/supabase/client";
 
-export const Route = createFileRoute("/_authenticated/")({
+export const Route = createFileRoute("/app/")({
   head: () => ({ meta: [{ title: "Dashboard — Anya" }] }),
   component: Dashboard,
 });
