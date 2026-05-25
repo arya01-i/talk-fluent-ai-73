@@ -9,7 +9,8 @@ export const Route = createFileRoute("/_authenticated")({
   component: AuthLayout,
 });
 
-const NAV = [
+type NavItem = { to: string; label: string; icon: typeof LayoutDashboard; exact?: boolean };
+const NAV: NavItem[] = [
   { to: "/app", label: "Dashboard", icon: LayoutDashboard, exact: true },
   { to: "/app/learn/text", label: "Text chat", icon: MessageSquare },
   { to: "/app/learn/voice", label: "Voice practice", icon: Mic },
@@ -18,7 +19,7 @@ const NAV = [
   { to: "/app/vocabulary", label: "Vocabulary", icon: BookOpen },
   { to: "/app/quizzes", label: "Quizzes", icon: ListChecks },
   { to: "/app/settings", label: "Settings", icon: Settings },
-] as const;
+];
 
 function AuthLayout() {
   const nav = useNavigate();
@@ -53,7 +54,7 @@ function AuthLayout() {
             const Icon = n.icon;
             const active = n.exact ? path === n.to : path.startsWith(n.to);
             return (
-              <Link key={n.to} to={n.to} className={cn(
+              <Link key={n.to} to={n.to as never} className={cn(
                 "flex items-center gap-3 px-3 py-2 rounded-md text-sm transition",
                 active ? "bg-primary text-primary-foreground" : "hover:bg-secondary text-foreground/80",
               )}>
@@ -77,7 +78,7 @@ function AuthLayout() {
             const Icon = n.icon;
             const active = n.exact ? path === n.to : path.startsWith(n.to);
             return (
-              <Link key={n.to} to={n.to} className={cn("flex flex-col items-center gap-1 py-2", active ? "text-primary" : "text-muted-foreground")}>
+              <Link key={n.to} to={n.to as never} className={cn("flex flex-col items-center gap-1 py-2", active ? "text-primary" : "text-muted-foreground")}>
                 <Icon className="size-4" />{n.label.split(" ")[0]}
               </Link>
             );
