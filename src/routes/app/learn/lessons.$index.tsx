@@ -49,7 +49,7 @@ function LessonDetail() {
             orderIndex,
           },
         });
-        if (!cancelled) setLesson(lesson as Lesson);
+        if (!cancelled) setLesson(lesson as unknown as Lesson);
       } catch (e) {
         toast.error(e instanceof Error ? e.message : "Failed to load lesson");
       } finally {
