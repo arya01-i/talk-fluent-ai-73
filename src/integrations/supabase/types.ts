@@ -14,7 +14,229 @@ export type Database = {
   }
   public: {
     Tables: {
-      [_ in never]: never
+      chat_messages: {
+        Row: {
+          content: string
+          created_at: string
+          id: string
+          role: string
+          session_id: string
+          user_id: string
+        }
+        Insert: {
+          content: string
+          created_at?: string
+          id?: string
+          role: string
+          session_id: string
+          user_id: string
+        }
+        Update: {
+          content?: string
+          created_at?: string
+          id?: string
+          role?: string
+          session_id?: string
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "chat_messages_session_id_fkey"
+            columns: ["session_id"]
+            isOneToOne: false
+            referencedRelation: "chat_sessions"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      chat_sessions: {
+        Row: {
+          created_at: string
+          id: string
+          learning_lang: string
+          level: Database["public"]["Enums"]["cefr_level"]
+          mode: string
+          title: string | null
+          user_id: string
+        }
+        Insert: {
+          created_at?: string
+          id?: string
+          learning_lang: string
+          level: Database["public"]["Enums"]["cefr_level"]
+          mode?: string
+          title?: string | null
+          user_id: string
+        }
+        Update: {
+          created_at?: string
+          id?: string
+          learning_lang?: string
+          level?: Database["public"]["Enums"]["cefr_level"]
+          mode?: string
+          title?: string | null
+          user_id?: string
+        }
+        Relationships: []
+      }
+      profiles: {
+        Row: {
+          created_at: string
+          display_name: string | null
+          id: string
+          learning_lang: string
+          level: Database["public"]["Enums"]["cefr_level"]
+          native_lang: string
+          streak: number
+          updated_at: string
+          xp: number
+        }
+        Insert: {
+          created_at?: string
+          display_name?: string | null
+          id: string
+          learning_lang?: string
+          level?: Database["public"]["Enums"]["cefr_level"]
+          native_lang?: string
+          streak?: number
+          updated_at?: string
+          xp?: number
+        }
+        Update: {
+          created_at?: string
+          display_name?: string | null
+          id?: string
+          learning_lang?: string
+          level?: Database["public"]["Enums"]["cefr_level"]
+          native_lang?: string
+          streak?: number
+          updated_at?: string
+          xp?: number
+        }
+        Relationships: []
+      }
+      quiz_attempts: {
+        Row: {
+          created_at: string
+          id: string
+          lang: string
+          level: Database["public"]["Enums"]["cefr_level"]
+          score: number
+          total: number
+          user_id: string
+        }
+        Insert: {
+          created_at?: string
+          id?: string
+          lang: string
+          level: Database["public"]["Enums"]["cefr_level"]
+          score: number
+          total: number
+          user_id: string
+        }
+        Update: {
+          created_at?: string
+          id?: string
+          lang?: string
+          level?: Database["public"]["Enums"]["cefr_level"]
+          score?: number
+          total?: number
+          user_id?: string
+        }
+        Relationships: []
+      }
+      quiz_questions: {
+        Row: {
+          correct_index: number
+          created_at: string
+          explanation: string | null
+          id: string
+          lang: string
+          level: Database["public"]["Enums"]["cefr_level"]
+          options: Json
+          question: string
+        }
+        Insert: {
+          correct_index: number
+          created_at?: string
+          explanation?: string | null
+          id?: string
+          lang: string
+          level: Database["public"]["Enums"]["cefr_level"]
+          options: Json
+          question: string
+        }
+        Update: {
+          correct_index?: number
+          created_at?: string
+          explanation?: string | null
+          id?: string
+          lang?: string
+          level?: Database["public"]["Enums"]["cefr_level"]
+          options?: Json
+          question?: string
+        }
+        Relationships: []
+      }
+      vocab_items: {
+        Row: {
+          created_at: string
+          example: string | null
+          id: string
+          lang: string
+          level: Database["public"]["Enums"]["cefr_level"]
+          translation_en: string
+          word: string
+        }
+        Insert: {
+          created_at?: string
+          example?: string | null
+          id?: string
+          lang: string
+          level: Database["public"]["Enums"]["cefr_level"]
+          translation_en: string
+          word: string
+        }
+        Update: {
+          created_at?: string
+          example?: string | null
+          id?: string
+          lang?: string
+          level?: Database["public"]["Enums"]["cefr_level"]
+          translation_en?: string
+          word?: string
+        }
+        Relationships: []
+      }
+      vocab_progress: {
+        Row: {
+          item_id: string
+          status: string
+          updated_at: string
+          user_id: string
+        }
+        Insert: {
+          item_id: string
+          status?: string
+          updated_at?: string
+          user_id: string
+        }
+        Update: {
+          item_id?: string
+          status?: string
+          updated_at?: string
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "vocab_progress_item_id_fkey"
+            columns: ["item_id"]
+            isOneToOne: false
+            referencedRelation: "vocab_items"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
     }
     Views: {
       [_ in never]: never
@@ -23,7 +245,7 @@ export type Database = {
       [_ in never]: never
     }
     Enums: {
-      [_ in never]: never
+      cefr_level: "A1" | "A2" | "B1" | "B2" | "C1" | "C2"
     }
     CompositeTypes: {
       [_ in never]: never
@@ -150,6 +372,8 @@ export type CompositeTypes<
 
 export const Constants = {
   public: {
-    Enums: {},
+    Enums: {
+      cefr_level: ["A1", "A2", "B1", "B2", "C1", "C2"],
+    },
   },
 } as const
