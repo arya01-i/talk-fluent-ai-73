@@ -17,6 +17,7 @@ import { Route as AppRouteImport } from './routes/app'
 import { Route as IndexRouteImport } from './routes/index'
 import { Route as AppIndexRouteImport } from './routes/app/index'
 import { Route as AppVocabularyRouteImport } from './routes/app/vocabulary'
+import { Route as AppQuizzesRouteImport } from './routes/app/quizzes'
 import { Route as AppLearnVoiceCallRouteImport } from './routes/app/learn/voice-call'
 import { Route as AppLearnVoiceRouteImport } from './routes/app/learn/voice'
 import { Route as AppLearnVideoCallRouteImport } from './routes/app/learn/video-call'
@@ -62,6 +63,11 @@ const AppVocabularyRoute = AppVocabularyRouteImport.update({
   path: '/vocabulary',
   getParentRoute: () => AppRoute,
 } as any)
+const AppQuizzesRoute = AppQuizzesRouteImport.update({
+  id: '/quizzes',
+  path: '/quizzes',
+  getParentRoute: () => AppRoute,
+} as any)
 const AppLearnVoiceCallRoute = AppLearnVoiceCallRouteImport.update({
   id: '/learn/voice-call',
   path: '/learn/voice-call',
@@ -90,6 +96,7 @@ export interface FileRoutesByFullPath {
   '/login': typeof LoginRoute
   '/reset-password': typeof ResetPasswordRoute
   '/signup': typeof SignupRoute
+  '/app/quizzes': typeof AppQuizzesRoute
   '/app/vocabulary': typeof AppVocabularyRoute
   '/app/': typeof AppIndexRoute
   '/app/learn/text': typeof AppLearnTextRoute
@@ -103,6 +110,7 @@ export interface FileRoutesByTo {
   '/login': typeof LoginRoute
   '/reset-password': typeof ResetPasswordRoute
   '/signup': typeof SignupRoute
+  '/app/quizzes': typeof AppQuizzesRoute
   '/app/vocabulary': typeof AppVocabularyRoute
   '/app': typeof AppIndexRoute
   '/app/learn/text': typeof AppLearnTextRoute
@@ -118,6 +126,7 @@ export interface FileRoutesById {
   '/login': typeof LoginRoute
   '/reset-password': typeof ResetPasswordRoute
   '/signup': typeof SignupRoute
+  '/app/quizzes': typeof AppQuizzesRoute
   '/app/vocabulary': typeof AppVocabularyRoute
   '/app/': typeof AppIndexRoute
   '/app/learn/text': typeof AppLearnTextRoute
@@ -134,6 +143,7 @@ export interface FileRouteTypes {
     | '/login'
     | '/reset-password'
     | '/signup'
+    | '/app/quizzes'
     | '/app/vocabulary'
     | '/app/'
     | '/app/learn/text'
@@ -147,6 +157,7 @@ export interface FileRouteTypes {
     | '/login'
     | '/reset-password'
     | '/signup'
+    | '/app/quizzes'
     | '/app/vocabulary'
     | '/app'
     | '/app/learn/text'
@@ -161,6 +172,7 @@ export interface FileRouteTypes {
     | '/login'
     | '/reset-password'
     | '/signup'
+    | '/app/quizzes'
     | '/app/vocabulary'
     | '/app/'
     | '/app/learn/text'
@@ -236,6 +248,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AppVocabularyRouteImport
       parentRoute: typeof AppRoute
     }
+    '/app/quizzes': {
+      id: '/app/quizzes'
+      path: '/quizzes'
+      fullPath: '/app/quizzes'
+      preLoaderRoute: typeof AppQuizzesRouteImport
+      parentRoute: typeof AppRoute
+    }
     '/app/learn/voice-call': {
       id: '/app/learn/voice-call'
       path: '/learn/voice-call'
@@ -268,6 +287,7 @@ declare module '@tanstack/react-router' {
 }
 
 interface AppRouteChildren {
+  AppQuizzesRoute: typeof AppQuizzesRoute
   AppVocabularyRoute: typeof AppVocabularyRoute
   AppIndexRoute: typeof AppIndexRoute
   AppLearnTextRoute: typeof AppLearnTextRoute
@@ -277,6 +297,7 @@ interface AppRouteChildren {
 }
 
 const AppRouteChildren: AppRouteChildren = {
+  AppQuizzesRoute: AppQuizzesRoute,
   AppVocabularyRoute: AppVocabularyRoute,
   AppIndexRoute: AppIndexRoute,
   AppLearnTextRoute: AppLearnTextRoute,
