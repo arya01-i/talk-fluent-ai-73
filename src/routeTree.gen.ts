@@ -9,38 +9,236 @@
 // Additionally, you should also exclude this file from your linter and/or formatter to prevent it from being checked or modified.
 
 import { Route as rootRouteImport } from './routes/__root'
+import { Route as SignupRouteImport } from './routes/signup'
+import { Route as ResetPasswordRouteImport } from './routes/reset-password'
+import { Route as LoginRouteImport } from './routes/login'
+import { Route as ForgotPasswordRouteImport } from './routes/forgot-password'
+import { Route as AppRouteImport } from './routes/app'
 import { Route as IndexRouteImport } from './routes/index'
+import { Route as AppIndexRouteImport } from './routes/app/index'
+import { Route as AppVocabularyRouteImport } from './routes/app/vocabulary'
+import { Route as AppSettingsRouteImport } from './routes/app/settings'
+import { Route as AppQuizzesRouteImport } from './routes/app/quizzes'
+import { Route as AppLearnVoiceCallRouteImport } from './routes/app/learn/voice-call'
+import { Route as AppLearnVoiceRouteImport } from './routes/app/learn/voice'
+import { Route as AppLearnVideoCallRouteImport } from './routes/app/learn/video-call'
+import { Route as AppLearnTextRouteImport } from './routes/app/learn/text'
 
+const SignupRoute = SignupRouteImport.update({
+  id: '/signup',
+  path: '/signup',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ResetPasswordRoute = ResetPasswordRouteImport.update({
+  id: '/reset-password',
+  path: '/reset-password',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const LoginRoute = LoginRouteImport.update({
+  id: '/login',
+  path: '/login',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ForgotPasswordRoute = ForgotPasswordRouteImport.update({
+  id: '/forgot-password',
+  path: '/forgot-password',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const AppRoute = AppRouteImport.update({
+  id: '/app',
+  path: '/app',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const IndexRoute = IndexRouteImport.update({
   id: '/',
   path: '/',
   getParentRoute: () => rootRouteImport,
 } as any)
+const AppIndexRoute = AppIndexRouteImport.update({
+  id: '/',
+  path: '/',
+  getParentRoute: () => AppRoute,
+} as any)
+const AppVocabularyRoute = AppVocabularyRouteImport.update({
+  id: '/vocabulary',
+  path: '/vocabulary',
+  getParentRoute: () => AppRoute,
+} as any)
+const AppSettingsRoute = AppSettingsRouteImport.update({
+  id: '/settings',
+  path: '/settings',
+  getParentRoute: () => AppRoute,
+} as any)
+const AppQuizzesRoute = AppQuizzesRouteImport.update({
+  id: '/quizzes',
+  path: '/quizzes',
+  getParentRoute: () => AppRoute,
+} as any)
+const AppLearnVoiceCallRoute = AppLearnVoiceCallRouteImport.update({
+  id: '/learn/voice-call',
+  path: '/learn/voice-call',
+  getParentRoute: () => AppRoute,
+} as any)
+const AppLearnVoiceRoute = AppLearnVoiceRouteImport.update({
+  id: '/learn/voice',
+  path: '/learn/voice',
+  getParentRoute: () => AppRoute,
+} as any)
+const AppLearnVideoCallRoute = AppLearnVideoCallRouteImport.update({
+  id: '/learn/video-call',
+  path: '/learn/video-call',
+  getParentRoute: () => AppRoute,
+} as any)
+const AppLearnTextRoute = AppLearnTextRouteImport.update({
+  id: '/learn/text',
+  path: '/learn/text',
+  getParentRoute: () => AppRoute,
+} as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
+  '/app': typeof AppRouteWithChildren
+  '/forgot-password': typeof ForgotPasswordRoute
+  '/login': typeof LoginRoute
+  '/reset-password': typeof ResetPasswordRoute
+  '/signup': typeof SignupRoute
+  '/app/quizzes': typeof AppQuizzesRoute
+  '/app/settings': typeof AppSettingsRoute
+  '/app/vocabulary': typeof AppVocabularyRoute
+  '/app/': typeof AppIndexRoute
+  '/app/learn/text': typeof AppLearnTextRoute
+  '/app/learn/video-call': typeof AppLearnVideoCallRoute
+  '/app/learn/voice': typeof AppLearnVoiceRoute
+  '/app/learn/voice-call': typeof AppLearnVoiceCallRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
+  '/forgot-password': typeof ForgotPasswordRoute
+  '/login': typeof LoginRoute
+  '/reset-password': typeof ResetPasswordRoute
+  '/signup': typeof SignupRoute
+  '/app/quizzes': typeof AppQuizzesRoute
+  '/app/settings': typeof AppSettingsRoute
+  '/app/vocabulary': typeof AppVocabularyRoute
+  '/app': typeof AppIndexRoute
+  '/app/learn/text': typeof AppLearnTextRoute
+  '/app/learn/video-call': typeof AppLearnVideoCallRoute
+  '/app/learn/voice': typeof AppLearnVoiceRoute
+  '/app/learn/voice-call': typeof AppLearnVoiceCallRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
+  '/app': typeof AppRouteWithChildren
+  '/forgot-password': typeof ForgotPasswordRoute
+  '/login': typeof LoginRoute
+  '/reset-password': typeof ResetPasswordRoute
+  '/signup': typeof SignupRoute
+  '/app/quizzes': typeof AppQuizzesRoute
+  '/app/settings': typeof AppSettingsRoute
+  '/app/vocabulary': typeof AppVocabularyRoute
+  '/app/': typeof AppIndexRoute
+  '/app/learn/text': typeof AppLearnTextRoute
+  '/app/learn/video-call': typeof AppLearnVideoCallRoute
+  '/app/learn/voice': typeof AppLearnVoiceRoute
+  '/app/learn/voice-call': typeof AppLearnVoiceCallRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/'
+  fullPaths:
+    | '/'
+    | '/app'
+    | '/forgot-password'
+    | '/login'
+    | '/reset-password'
+    | '/signup'
+    | '/app/quizzes'
+    | '/app/settings'
+    | '/app/vocabulary'
+    | '/app/'
+    | '/app/learn/text'
+    | '/app/learn/video-call'
+    | '/app/learn/voice'
+    | '/app/learn/voice-call'
   fileRoutesByTo: FileRoutesByTo
-  to: '/'
-  id: '__root__' | '/'
+  to:
+    | '/'
+    | '/forgot-password'
+    | '/login'
+    | '/reset-password'
+    | '/signup'
+    | '/app/quizzes'
+    | '/app/settings'
+    | '/app/vocabulary'
+    | '/app'
+    | '/app/learn/text'
+    | '/app/learn/video-call'
+    | '/app/learn/voice'
+    | '/app/learn/voice-call'
+  id:
+    | '__root__'
+    | '/'
+    | '/app'
+    | '/forgot-password'
+    | '/login'
+    | '/reset-password'
+    | '/signup'
+    | '/app/quizzes'
+    | '/app/settings'
+    | '/app/vocabulary'
+    | '/app/'
+    | '/app/learn/text'
+    | '/app/learn/video-call'
+    | '/app/learn/voice'
+    | '/app/learn/voice-call'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
+  AppRoute: typeof AppRouteWithChildren
+  ForgotPasswordRoute: typeof ForgotPasswordRoute
+  LoginRoute: typeof LoginRoute
+  ResetPasswordRoute: typeof ResetPasswordRoute
+  SignupRoute: typeof SignupRoute
 }
 
 declare module '@tanstack/react-router' {
   interface FileRoutesByPath {
+    '/signup': {
+      id: '/signup'
+      path: '/signup'
+      fullPath: '/signup'
+      preLoaderRoute: typeof SignupRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/reset-password': {
+      id: '/reset-password'
+      path: '/reset-password'
+      fullPath: '/reset-password'
+      preLoaderRoute: typeof ResetPasswordRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/login': {
+      id: '/login'
+      path: '/login'
+      fullPath: '/login'
+      preLoaderRoute: typeof LoginRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/forgot-password': {
+      id: '/forgot-password'
+      path: '/forgot-password'
+      fullPath: '/forgot-password'
+      preLoaderRoute: typeof ForgotPasswordRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/app': {
+      id: '/app'
+      path: '/app'
+      fullPath: '/app'
+      preLoaderRoute: typeof AppRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/': {
       id: '/'
       path: '/'
@@ -48,22 +246,97 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof IndexRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/app/': {
+      id: '/app/'
+      path: '/'
+      fullPath: '/app/'
+      preLoaderRoute: typeof AppIndexRouteImport
+      parentRoute: typeof AppRoute
+    }
+    '/app/vocabulary': {
+      id: '/app/vocabulary'
+      path: '/vocabulary'
+      fullPath: '/app/vocabulary'
+      preLoaderRoute: typeof AppVocabularyRouteImport
+      parentRoute: typeof AppRoute
+    }
+    '/app/settings': {
+      id: '/app/settings'
+      path: '/settings'
+      fullPath: '/app/settings'
+      preLoaderRoute: typeof AppSettingsRouteImport
+      parentRoute: typeof AppRoute
+    }
+    '/app/quizzes': {
+      id: '/app/quizzes'
+      path: '/quizzes'
+      fullPath: '/app/quizzes'
+      preLoaderRoute: typeof AppQuizzesRouteImport
+      parentRoute: typeof AppRoute
+    }
+    '/app/learn/voice-call': {
+      id: '/app/learn/voice-call'
+      path: '/learn/voice-call'
+      fullPath: '/app/learn/voice-call'
+      preLoaderRoute: typeof AppLearnVoiceCallRouteImport
+      parentRoute: typeof AppRoute
+    }
+    '/app/learn/voice': {
+      id: '/app/learn/voice'
+      path: '/learn/voice'
+      fullPath: '/app/learn/voice'
+      preLoaderRoute: typeof AppLearnVoiceRouteImport
+      parentRoute: typeof AppRoute
+    }
+    '/app/learn/video-call': {
+      id: '/app/learn/video-call'
+      path: '/learn/video-call'
+      fullPath: '/app/learn/video-call'
+      preLoaderRoute: typeof AppLearnVideoCallRouteImport
+      parentRoute: typeof AppRoute
+    }
+    '/app/learn/text': {
+      id: '/app/learn/text'
+      path: '/learn/text'
+      fullPath: '/app/learn/text'
+      preLoaderRoute: typeof AppLearnTextRouteImport
+      parentRoute: typeof AppRoute
+    }
   }
 }
 
+interface AppRouteChildren {
+  AppQuizzesRoute: typeof AppQuizzesRoute
+  AppSettingsRoute: typeof AppSettingsRoute
+  AppVocabularyRoute: typeof AppVocabularyRoute
+  AppIndexRoute: typeof AppIndexRoute
+  AppLearnTextRoute: typeof AppLearnTextRoute
+  AppLearnVideoCallRoute: typeof AppLearnVideoCallRoute
+  AppLearnVoiceRoute: typeof AppLearnVoiceRoute
+  AppLearnVoiceCallRoute: typeof AppLearnVoiceCallRoute
+}
+
+const AppRouteChildren: AppRouteChildren = {
+  AppQuizzesRoute: AppQuizzesRoute,
+  AppSettingsRoute: AppSettingsRoute,
+  AppVocabularyRoute: AppVocabularyRoute,
+  AppIndexRoute: AppIndexRoute,
+  AppLearnTextRoute: AppLearnTextRoute,
+  AppLearnVideoCallRoute: AppLearnVideoCallRoute,
+  AppLearnVoiceRoute: AppLearnVoiceRoute,
+  AppLearnVoiceCallRoute: AppLearnVoiceCallRoute,
+}
+
+const AppRouteWithChildren = AppRoute._addFileChildren(AppRouteChildren)
+
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
+  AppRoute: AppRouteWithChildren,
+  ForgotPasswordRoute: ForgotPasswordRoute,
+  LoginRoute: LoginRoute,
+  ResetPasswordRoute: ResetPasswordRoute,
+  SignupRoute: SignupRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
   ._addFileTypes<FileRouteTypes>()
-
-import type { getRouter } from './router.tsx'
-import type { startInstance } from './start.ts'
-declare module '@tanstack/react-start' {
-  interface Register {
-    ssr: true
-    router: Awaited<ReturnType<typeof getRouter>>
-    config: Awaited<ReturnType<typeof startInstance.getOptions>>
-  }
-}
