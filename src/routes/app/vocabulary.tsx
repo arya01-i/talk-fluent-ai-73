@@ -4,8 +4,11 @@ import { supabase } from "@/integrations/supabase/client";
 import { useProfile } from "@/hooks/use-profile";
 import { Card } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
-import { Volume2, Check } from "lucide-react";
+import { Volume2, Check, Sparkles, Loader2 } from "lucide-react";
 import { speak } from "@/lib/speech";
+import { useServerFn } from "@tanstack/react-start";
+import { ensureVocab } from "@/lib/vocab.functions";
+import { toast } from "sonner";
 
 export const Route = createFileRoute("/app/vocabulary")({
   head: () => ({ meta: [{ title: "Vocabulary — Lingvo" }] }),
@@ -18,19 +21,35 @@ function VocabPage() {
   const { profile } = useProfile();
   const [items, setItems] = useState<Item[]>([]);
   const [known, setKnown] = useState<Set<string>>(new Set());
+  const [gen, setGen] = useState(false);
+  const generate = useServerFn(ensureVocab);
 
-  useEffect(() => {
+  const load = async () => {
     if (!profile) return;
-    (async () => {
-      const { data } = await supabase.from("vocab_items")
-        .select("id,word,translation_en,example")
-        .eq("lang", profile.learning_lang).eq("level", profile.level).order("word");
-      setItems((data as Item[]) ?? []);
-      const { data: prog } = await supabase.from("vocab_progress")
-        .select("item_id,status").eq("user_id", profile.id).eq("status", "known");
-      setKnown(new Set((prog ?? []).map((r: any) => r.item_id)));
-    })();
-  }, [profile]);
+    const { data } = await supabase.from("vocab_items")
+      .select("id,word,translation_en,example")
+      .eq("lang", profile.learning_lang).eq("level", profile.level).order("word");
+    setItems((data as Item[]) ?? []);
+    const { data: prog } = await supabase.from("vocab_progress")
+      .select("item_id,status").eq("user_id", profile.id).eq("status", "known");
+    setKnown(new Set((prog ?? []).map((r: any) => r.item_id)));
+  };
+
+  useEffect(() => { load(); /* eslint-disable-next-line */ }, [profile?.learning_lang, profile?.level]);
+
+  const handleGenerate = async () => {
+    if (!profile) return;
+    setGen(true);
+    try {
+      await generate({ data: { lang: profile.learning_lang, nativeLang: profile.native_lang, level: profile.level } });
+      await load();
+      toast.success("Vocabulary ready!");
+    } catch (e) {
+      toast.error(e instanceof Error ? e.message : "Failed to generate");
+    } finally {
+      setGen(false);
+    }
+  };
 
   const toggle = async (id: string) => {
     if (!profile) return;
@@ -46,10 +65,20 @@ function VocabPage() {
 
   return (
     <div className="max-w-3xl mx-auto p-6">
-      <h1 className="text-2xl font-semibold mb-1">Vocabulary</h1>
-      <p className="text-sm text-muted-foreground mb-6">{profile.learning_lang} · Level {profile.level} · {known.size}/{items.length} known</p>
+      <div className="flex items-start justify-between gap-3 mb-6">
+        <div>
+          <h1 className="text-2xl font-semibold mb-1">Vocabulary</h1>
+          <p className="text-sm text-muted-foreground">{profile.learning_lang} · Level {profile.level} · {known.size}/{items.length} known</p>
+        </div>
+        <Button onClick={handleGenerate} disabled={gen} variant="outline" size="sm">
+          {gen ? <Loader2 className="size-4 mr-1 animate-spin" /> : <Sparkles className="size-4 mr-1" />}
+          {items.length === 0 ? "Generate vocabulary" : "Add more"}
+        </Button>
+      </div>
       {items.length === 0 ? (
-        <Card className="p-6 text-center text-muted-foreground">No vocabulary yet for this language/level. Try a different combination.</Card>
+        <Card className="p-8 text-center text-muted-foreground">
+          No vocabulary yet for {profile.learning_lang} {profile.level}. Tap "Generate vocabulary" to create some with AI.
+        </Card>
       ) : (
         <div className="grid sm:grid-cols-2 gap-3">
           {items.map((it) => (
