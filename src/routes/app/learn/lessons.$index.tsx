@@ -31,33 +31,28 @@ function LessonDetail() {
 
   const [lesson, setLesson] = useState<Lesson | null>(null);
   const [loading, setLoading] = useState(true);
+  const [err, setErr] = useState<string | null>(null);
   const [phase, setPhase] = useState<"learn" | "exam" | "done">("learn");
   const [answers, setAnswers] = useState<Record<number, number>>({});
   const [result, setResult] = useState<{ score: number; total: number; passed: boolean } | null>(null);
 
-  useEffect(() => {
+  const loadLesson = async () => {
     if (!profile) return;
-    let cancelled = false;
-    setLoading(true);
-    (async () => {
-      try {
-        const { lesson } = await ensure({
-          data: {
-            lang: profile.learning_lang,
-            nativeLang: profile.native_lang,
-            level: profile.level,
-            orderIndex,
-          },
-        });
-        if (!cancelled) setLesson(lesson as unknown as Lesson);
-      } catch (e) {
-        toast.error(e instanceof Error ? e.message : "Failed to load lesson");
-      } finally {
-        if (!cancelled) setLoading(false);
-      }
-    })();
-    return () => { cancelled = true; };
-  }, [profile, orderIndex, ensure]);
+    setLoading(true); setErr(null);
+    try {
+      const { lesson } = await ensure({
+        data: { lang: profile.learning_lang, nativeLang: profile.native_lang, level: profile.level, orderIndex },
+      });
+      setLesson(lesson as unknown as Lesson);
+    } catch (e) {
+      const msg = e instanceof Error ? e.message : "Failed to load lesson";
+      setErr(msg); toast.error(msg);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  useEffect(() => { loadLesson(); /* eslint-disable-next-line */ }, [profile?.learning_lang, profile?.level, orderIndex]);
 
   const submit = async () => {
     if (!lesson || !profile) return;
@@ -76,10 +71,18 @@ function LessonDetail() {
 
   if (!profile || loading) return (
     <div className="p-12 flex items-center justify-center gap-2 text-muted-foreground">
-      <Loader2 className="size-4 animate-spin" /> Preparing your lesson…
+      <Loader2 className="size-4 animate-spin" /> Preparing your lesson with AI… (first time can take ~20s)
     </div>
   );
-  if (!lesson) return <div className="p-8 text-muted-foreground">Lesson unavailable.</div>;
+  if (!lesson) return (
+    <div className="max-w-md mx-auto p-8 text-center space-y-4">
+      <p className="text-muted-foreground">{err ?? "Lesson unavailable."}</p>
+      <div className="flex gap-2 justify-center">
+        <Button onClick={loadLesson}>Try again</Button>
+        <Button variant="outline" onClick={() => nav({ to: "/app/learn/lessons" })}>Back</Button>
+      </div>
+    </div>
+  );
 
   return (
     <div className="max-w-3xl mx-auto p-6 space-y-5">
