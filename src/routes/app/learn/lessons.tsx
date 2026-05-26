@@ -1,4 +1,4 @@
-import { createFileRoute, Link } from "@tanstack/react-router";
+import { createFileRoute, Link, Outlet, useRouterState } from "@tanstack/react-router";
 import { useEffect, useState } from "react";
 import { useProfile } from "@/hooks/use-profile";
 import { supabase } from "@/integrations/supabase/client";
@@ -17,6 +17,7 @@ type LessonRow = { id: string; order_index: number; title: string; summary: stri
 type ProgressRow = { lesson_id: string; passed: boolean; score: number; total: number };
 
 function LessonsPage() {
+  const path = useRouterState({ select: (s) => s.location.pathname });
   const { profile } = useProfile();
   const [lessons, setLessons] = useState<LessonRow[]>([]);
   const [prog, setProg] = useState<Record<string, ProgressRow>>({});
@@ -39,6 +40,8 @@ function LessonsPage() {
       setProg(map);
     })();
   }, [profile]);
+
+  if (path !== "/app/learn/lessons") return <Outlet />;
 
   if (!profile) return <div className="p-8 text-muted-foreground">Loading…</div>;
 
