@@ -22,8 +22,6 @@ function LessonsPage() {
   const [lessons, setLessons] = useState<LessonRow[]>([]);
   const [prog, setProg] = useState<Record<string, ProgressRow>>({});
 
-  if (path !== "/app/learn/lessons") return <Outlet />;
-
   useEffect(() => {
     if (!profile) return;
     (async () => {
@@ -42,6 +40,8 @@ function LessonsPage() {
       setProg(map);
     })();
   }, [profile]);
+
+  if (path !== "/app/learn/lessons") return <Outlet />;
 
   if (!profile) return <div className="p-8 text-muted-foreground">Loading…</div>;
 
