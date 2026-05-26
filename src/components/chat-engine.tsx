@@ -16,10 +16,13 @@ export function useTutor(mode: Mode) {
   const call = useServerFn(chatWithTutor);
   const [messages, setMessages] = useState<Msg[]>([]);
   const [busy, setBusy] = useState(false);
+  const msgsRef = useRef<Msg[]>([]);
+  useEffect(() => { msgsRef.current = messages; }, [messages]);
 
   const send = async (text: string): Promise<string | null> => {
     if (!profile || !text.trim()) return null;
-    const next: Msg[] = [...messages, { role: "user", content: text }];
+    const next: Msg[] = [...msgsRef.current, { role: "user", content: text }];
+    msgsRef.current = next;
     setMessages(next);
     setBusy(true);
     try {
@@ -32,7 +35,9 @@ export function useTutor(mode: Mode) {
           messages: next,
         },
       });
-      setMessages((m) => [...m, { role: "assistant", content: reply }]);
+      const after: Msg[] = [...next, { role: "assistant" as const, content: reply }];
+      msgsRef.current = after;
+      setMessages(after);
       return reply;
     } catch (e) {
       toast.error(e instanceof Error ? e.message : "Tutor error");
@@ -42,7 +47,7 @@ export function useTutor(mode: Mode) {
     }
   };
 
-  const reset = () => setMessages([]);
+  const reset = () => { msgsRef.current = []; setMessages([]); };
   return { messages, send, busy, reset, profile };
 }
 
