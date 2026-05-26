@@ -13,13 +13,13 @@ const InputSchema = z.object({
 const LessonSchema = z.object({
   title: z.string(),
   summary: z.string(),
-  sections: z.array(z.object({ heading: z.string(), body: z.string() })).min(2).max(6),
+  sections: z.array(z.object({ heading: z.string(), body: z.string() })).min(2).max(8),
   exam: z.array(z.object({
     question: z.string(),
-    options: z.array(z.string()).length(4),
+    options: z.array(z.string()).min(3).max(4),
     correct_index: z.number().int().min(0).max(3),
     explanation: z.string().optional().default(""),
-  })).min(3).max(6),
+  })).min(3).max(8),
 });
 
 export const ensureLesson = createServerFn({ method: "POST" })
