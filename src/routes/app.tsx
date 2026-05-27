@@ -74,12 +74,15 @@ function AuthLayout() {
           <Button size="sm" variant="ghost" onClick={logout}><LogOut className="size-4" /></Button>
         </header>
         <main className="flex-1 overflow-auto"><Outlet /></main>
-        <nav className="md:hidden grid grid-cols-5 border-t bg-card text-xs">
-          {NAV.slice(0, 5).map((n) => {
+        <nav className="md:hidden flex overflow-x-auto border-t bg-card text-xs sticky bottom-0">
+          {NAV.map((n) => {
             const Icon = n.icon;
             const active = n.exact ? path === n.to : path.startsWith(n.to);
             return (
-              <Link key={n.to} to={n.to as never} className={cn("flex flex-col items-center gap-1 py-2", active ? "text-primary" : "text-muted-foreground")}>
+              <Link key={n.to} to={n.to as never} className={cn(
+                "flex flex-col items-center gap-1 py-2 px-3 shrink-0 min-w-[70px]",
+                active ? "text-primary font-medium" : "text-muted-foreground",
+              )}>
                 <Icon className="size-4" />{n.label.split(" ")[0]}
               </Link>
             );
