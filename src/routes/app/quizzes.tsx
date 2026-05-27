@@ -1,9 +1,13 @@
 import { createFileRoute } from "@tanstack/react-router";
-import { useEffect, useState } from "react";
+import { useEffect, useState, useCallback } from "react";
 import { supabase } from "@/integrations/supabase/client";
 import { useProfile } from "@/hooks/use-profile";
 import { Card } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
+import { useServerFn } from "@tanstack/react-start";
+import { ensureQuizzes } from "@/lib/quiz.functions";
+import { toast } from "sonner";
+import { Loader2, Sparkles } from "lucide-react";
 
 export const Route = createFileRoute("/app/quizzes")({
   head: () => ({ meta: [{ title: "Quizzes — Lingvo" }] }),
@@ -19,20 +23,49 @@ function QuizPage() {
   const [picked, setPicked] = useState<number | null>(null);
   const [score, setScore] = useState(0);
   const [done, setDone] = useState(false);
+  const [loading, setLoading] = useState(true);
+  const [gen, setGen] = useState(false);
+  const ensure = useServerFn(ensureQuizzes);
 
-  useEffect(() => {
+  const load = useCallback(async () => {
     if (!profile) return;
-    (async () => {
-      const { data } = await supabase.from("quiz_questions")
-        .select("id,question,options,correct_index,explanation")
-        .eq("lang", profile.learning_lang).eq("level", profile.level);
-      const shuffled = [(data as Q[]) ?? []][0].sort(() => Math.random() - 0.5);
-      setQs(shuffled); setI(0); setPicked(null); setScore(0); setDone(false);
-    })();
+    setLoading(true);
+    const { data } = await supabase.from("quiz_questions")
+      .select("id,question,options,correct_index,explanation")
+      .eq("lang", profile.learning_lang).eq("level", profile.level);
+    const shuffled = ((data as Q[]) ?? []).slice().sort(() => Math.random() - 0.5);
+    setQs(shuffled); setI(0); setPicked(null); setScore(0); setDone(false);
+    setLoading(false);
   }, [profile]);
 
+  useEffect(() => { load(); }, [load]);
+
+  const generate = async () => {
+    if (!profile) return;
+    setGen(true);
+    try {
+      const r = await ensure({ data: { lang: profile.learning_lang, nativeLang: profile.native_lang, level: profile.level } });
+      toast.success(r.added > 0 ? `Added ${r.added} new questions` : "Quiz set ready");
+      await load();
+    } catch (e: any) {
+      toast.error(e?.message ?? "Could not generate quiz");
+    } finally {
+      setGen(false);
+    }
+  };
+
   if (!profile) return <div className="p-8 text-muted-foreground">Loading…</div>;
-  if (qs.length === 0) return <div className="p-8 text-muted-foreground">No quizzes for this language/level yet.</div>;
+  if (loading) return <div className="p-8 text-muted-foreground">Loading quizzes…</div>;
+  if (qs.length === 0) return (
+    <div className="max-w-xl mx-auto p-8 text-center space-y-4">
+      <h1 className="text-2xl font-bold">No quizzes yet</h1>
+      <p className="text-muted-foreground">Generate a quiz set for {profile.learning_lang} · {profile.level}.</p>
+      <Button size="lg" onClick={generate} disabled={gen}>
+        {gen ? <Loader2 className="mr-2 size-4 animate-spin" /> : <Sparkles className="mr-2 size-4" />}
+        {gen ? "Generating…" : "Generate quiz"}
+      </Button>
+    </div>
+  );
 
   const q = qs[i];
 
