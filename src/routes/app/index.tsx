@@ -7,6 +7,48 @@ import { MessageSquare, Mic, Phone, Video, BookOpen, ListChecks, Flame, Trophy, 
 import { useEffect, useState } from "react";
 import { supabase } from "@/integrations/supabase/client";
 
+const LANG_INFO: Record<string, { flag: string; greeting: string; tip: string; tagline: string }> = {
+  English: { flag: "🇬🇧", greeting: "Hello!", tip: "Practice 'th' sounds today.", tagline: "Unlock global careers" },
+  Spanish: { flag: "🇪🇸", greeting: "¡Hola!", tip: "Roll the 'rr' in 'perro'.", tagline: "Talk to 500M+ people" },
+  French: { flag: "🇫🇷", greeting: "Bonjour !", tip: "Nasal vowels are key.", tagline: "Open doors in Europe & Africa" },
+  German: { flag: "🇩🇪", greeting: "Hallo!", tip: "Master der/die/das.", tagline: "Top engineering economy" },
+  Italian: { flag: "🇮🇹", greeting: "Ciao!", tip: "Double consonants matter.", tagline: "Art, food, opera" },
+  Portuguese: { flag: "🇵🇹", greeting: "Olá!", tip: "Watch nasal 'ão' sounds.", tagline: "260M speakers worldwide" },
+  Dutch: { flag: "🇳🇱", greeting: "Hallo!", tip: "The 'g' is throaty.", tagline: "Gateway to NL & BE" },
+  Russian: { flag: "🇷🇺", greeting: "Привет!", tip: "Learn Cyrillic basics.", tagline: "258M speakers" },
+  Polish: { flag: "🇵🇱", greeting: "Cześć!", tip: "Practice 'sz' vs 'cz'.", tagline: "Central Europe hub" },
+  Turkish: { flag: "🇹🇷", greeting: "Merhaba!", tip: "Vowel harmony rules.", tagline: "Bridge of two continents" },
+  Arabic: { flag: "🇸🇦", greeting: "مرحبا!", tip: "Learn right-to-left script.", tagline: "Speak in 25+ countries" },
+  Hindi: { flag: "🇮🇳", greeting: "नमस्ते!", tip: "Devanagari is phonetic.", tagline: "600M+ speakers" },
+  Bengali: { flag: "🇧🇩", greeting: "নমস্কার!", tip: "Soft consonant sounds.", tagline: "7th most-spoken language" },
+  Urdu: { flag: "🇵🇰", greeting: "السلام علیکم!", tip: "Nastaliq script flows.", tagline: "Poetry & literature" },
+  Tamil: { flag: "🇮🇳", greeting: "வணக்கம்!", tip: "Long vowels change meaning.", tagline: "Ancient classical language" },
+  Telugu: { flag: "🇮🇳", greeting: "నమస్కారం!", tip: "Italian of the East.", tagline: "80M+ speakers" },
+  Marathi: { flag: "🇮🇳", greeting: "नमस्कार!", tip: "Shares script with Hindi.", tagline: "Cultural capital language" },
+  Punjabi: { flag: "🇮🇳", greeting: "ਸਤ ਸ੍ਰੀ ਅਕਾਲ!", tip: "Tones matter in Gurmukhi.", tagline: "Vibrant diaspora" },
+  Japanese: { flag: "🇯🇵", greeting: "こんにちは!", tip: "Start with hiragana.", tagline: "Tech, anime, business" },
+  Korean: { flag: "🇰🇷", greeting: "안녕하세요!", tip: "Hangul learns in a day.", tagline: "K-pop, K-drama, K-tech" },
+  "Chinese (Mandarin)": { flag: "🇨🇳", greeting: "你好!", tip: "Four tones, big difference.", tagline: "1.1B+ speakers" },
+  Vietnamese: { flag: "🇻🇳", greeting: "Xin chào!", tip: "Six tones to master.", tagline: "Fast-growing economy" },
+  Thai: { flag: "🇹🇭", greeting: "สวัสดี!", tip: "Five tones, beautiful script.", tagline: "Land of smiles" },
+  Indonesian: { flag: "🇮🇩", greeting: "Halo!", tip: "No tenses — relax!", tagline: "Easiest Asian language" },
+  Swahili: { flag: "🇰🇪", greeting: "Habari!", tip: "Logical noun classes.", tagline: "Lingua franca of E. Africa" },
+  Greek: { flag: "🇬🇷", greeting: "Γεια σας!", tip: "Stress changes meaning.", tagline: "Root of Western thought" },
+  Hebrew: { flag: "🇮🇱", greeting: "שלום!", tip: "Right-to-left, no vowels.", tagline: "3,000 years of history" },
+  Czech: { flag: "🇨🇿", greeting: "Ahoj!", tip: "Watch the 'ř' sound.", tagline: "Heart of Europe" },
+  Swedish: { flag: "🇸🇪", greeting: "Hej!", tip: "Pitch accent is musical.", tagline: "Gateway to Scandinavia" },
+  Norwegian: { flag: "🇳🇴", greeting: "Hei!", tip: "Two written forms exist.", tagline: "Easiest Nordic language" },
+  Danish: { flag: "🇩🇰", greeting: "Hej!", tip: "Soft 'd' sounds tricky.", tagline: "Hygge lifestyle" },
+  Finnish: { flag: "🇫🇮", greeting: "Hei!", tip: "15 grammatical cases!", tagline: "Unique & beautiful" },
+  Hungarian: { flag: "🇭🇺", greeting: "Szia!", tip: "Vowel harmony rules.", tagline: "Distinct from neighbors" },
+  Romanian: { flag: "🇷🇴", greeting: "Bună!", tip: "Closest to Latin today.", tagline: "Romance in the East" },
+  Ukrainian: { flag: "🇺🇦", greeting: "Привіт!", tip: "Melodic Slavic tongue.", tagline: "40M+ speakers" },
+};
+
+function langInfo(lang: string) {
+  return LANG_INFO[lang] ?? { flag: "🌍", greeting: "Hello!", tip: "Start with everyday phrases.", tagline: "A new world awaits" };
+}
+
 export const Route = createFileRoute("/app/")({
   head: () => ({ meta: [{ title: "Dashboard — Lingvo" }] }),
   component: Dashboard,
@@ -29,11 +71,20 @@ function Dashboard() {
 
   if (loading || !profile) return <div className="p-8 text-muted-foreground">Loading…</div>;
 
+  const info = langInfo(profile.learning_lang);
+
   return (
     <div className="max-w-5xl mx-auto p-6 md:p-10 space-y-8">
-      <div>
-        <h1 className="text-3xl md:text-4xl font-bold">Hi {profile.display_name ?? "there"} 👋</h1>
-        <p className="text-muted-foreground mt-1">Learning <span className="font-medium text-foreground">{profile.learning_lang}</span> · Level {profile.level}</p>
+      <div className="relative overflow-hidden rounded-2xl border bg-gradient-to-br from-primary/15 via-accent/10 to-background p-6 md:p-8">
+        <div className="flex items-start gap-4">
+          <div className="text-6xl md:text-7xl leading-none">{info.flag}</div>
+          <div className="flex-1 min-w-0">
+            <p className="text-xs uppercase tracking-wider text-primary font-semibold">{info.tagline}</p>
+            <h1 className="text-2xl md:text-4xl font-bold mt-1">{info.greeting} {profile.display_name ?? ""}</h1>
+            <p className="text-muted-foreground mt-1">Your <span className="font-medium text-foreground">{profile.learning_lang}</span> journey · Level {profile.level}</p>
+            <p className="mt-3 text-sm bg-accent/30 inline-block px-3 py-1 rounded-full">💡 {info.tip}</p>
+          </div>
+        </div>
       </div>
 
       <Card className="p-5">
