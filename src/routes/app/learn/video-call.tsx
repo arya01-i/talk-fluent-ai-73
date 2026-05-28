@@ -3,7 +3,7 @@ import { useEffect, useRef, useState } from "react";
 import { useTutor } from "@/components/chat-engine";
 import { Button } from "@/components/ui/button";
 import { Video, PhoneOff, VideoOff, User, UserRound } from "lucide-react";
-import { createRecognizer, speak, speechSupported, stopSpeaking } from "@/lib/speech";
+import { createRecognizer, hasSpeakableContent, speak, speechSupported, stopSpeaking } from "@/lib/speech";
 import { toast } from "sonner";
 
 export const Route = createFileRoute("/app/learn/video-call")({
@@ -47,15 +47,16 @@ function VideoCallPage() {
   const loop = () => {
     if (!activeRef.current || !profile) return;
     const r = createRecognizer(profile.learning_lang);
-    if (!r) return;
+    if (!r) { setStatus("Speech recognition is unavailable"); return; }
     recRef.current = r;
     setStatus("Listening…");
     r.onresult = async (e: any) => {
-      const text = e.results[0][0].transcript;
+      const text = e.results[0]?.[0]?.transcript?.trim() ?? "";
+      if (!text) { if (activeRef.current) loop(); return; }
       setStatus("Thinking…");
       const reply = await send(text);
       if (!activeRef.current) return;
-      if (reply) {
+      if (reply && hasSpeakableContent(reply)) {
         setStatus("Lingvo is speaking…"); setSpeaking(true);
         speak(
           reply,
@@ -65,7 +66,10 @@ function VideoCallPage() {
         );
       } else { loop(); }
     };
-    r.onerror = () => { if (activeRef.current) loop(); };
+    r.onerror = () => {
+      setStatus("I didn’t catch that. Please speak again.");
+      if (activeRef.current) window.setTimeout(loop, 700);
+    };
     try { r.start(); } catch {}
   };
 
