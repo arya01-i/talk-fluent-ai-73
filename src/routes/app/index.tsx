@@ -2,7 +2,7 @@ import { createFileRoute, Link, useNavigate } from "@tanstack/react-router";
 import { useProfile } from "@/hooks/use-profile";
 import { Card } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
-import { MessageSquare, Mic, Phone, Video, BookOpen, ListChecks, Flame, Trophy, GraduationCap, Sparkles, Dice5, Music, Zap } from "lucide-react";
+import { MessageSquare, Mic, Phone, Video, BookOpen, ListChecks, Flame, Trophy, GraduationCap, Sparkles, Dice5, Music, Zap, Puzzle, Headphones, BookText } from "lucide-react";
 import { useEffect, useState } from "react";
 import { supabase } from "@/integrations/supabase/client";
 
@@ -112,6 +112,17 @@ function Dashboard() {
       </div>
 
       <FunActivities lang={profile.learning_lang} />
+
+      <div>
+        <h2 className="font-semibold text-lg mb-3 flex items-center gap-2">
+          <Sparkles className="size-4 text-primary" /> Mini games
+        </h2>
+        <div className="grid sm:grid-cols-3 gap-4">
+          <Tile to="/app/games/word-match" title="Word match" desc="Match target words to their meanings. Tap to hear each word." icon={<Puzzle />} />
+          <Tile to="/app/games/dictation" title="Listen & Type" desc="Hear a sentence, type it back, see your accuracy score." icon={<Headphones />} />
+          <Tile to="/app/games/story" title="Mini story" desc="Read a tiny AI-made story line by line, with audio." icon={<BookText />} />
+        </div>
+      </div>
 
       <MascotBuddies />
 
