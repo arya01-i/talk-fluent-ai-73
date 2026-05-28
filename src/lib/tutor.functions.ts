@@ -15,6 +15,20 @@ const InputSchema = z.object({
   messages: z.array(MessageSchema).min(1).max(40),
 });
 
+const punctuationWords = /\b(question mark|exclamation mark|exclamation point|period|full stop|comma|colon|semicolon)\b/gi;
+
+function hasHumanSpeech(value: string) {
+  const mainLine = value.split("↳")[0].replace(punctuationWords, "");
+  return /[\p{L}\p{N}]/u.test(mainLine) && mainLine.replace(/[^\p{L}\p{N}\s]/gu, "").trim().length >= 3;
+}
+
+function safeVoiceReply(reply: string, language: string, nativeLanguage: string) {
+  if (hasHumanSpeech(reply)) return reply;
+  return language === "English"
+    ? `I hear you. Let's practice one simple sentence together.\n↳ ${nativeLanguage}: I will help you continue.`
+    : `Good try. Please say one short sentence in ${language}, and I will help you improve it.\n↳ ${nativeLanguage}: I will help you continue.`;
+}
+
 export const chatWithTutor = createServerFn({ method: "POST" })
   .middleware([requireSupabaseAuth])
   .inputValidator((input: unknown) => InputSchema.parse(input))
@@ -57,6 +71,7 @@ Rules:
     const json = (await res.json()) as {
       choices?: { message?: { content?: string } }[];
     };
-    const reply = json.choices?.[0]?.message?.content ?? "…";
+    const rawReply = json.choices?.[0]?.message?.content ?? "";
+    const reply = spoken ? safeVoiceReply(rawReply, data.learningLang, data.nativeLang) : rawReply || "I'm here to help you practice.";
     return { reply };
   });
