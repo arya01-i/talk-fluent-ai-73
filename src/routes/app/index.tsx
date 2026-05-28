@@ -117,6 +117,8 @@ function Dashboard() {
 
       <FunActivities lang={profile.learning_lang} />
 
+      <MascotBuddies />
+
       <div>
         <h2 className="font-semibold text-lg mb-3">Practice with Lingvo</h2>
         <div className="grid sm:grid-cols-2 gap-4">
