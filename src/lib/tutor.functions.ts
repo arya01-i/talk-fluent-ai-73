@@ -16,9 +16,10 @@ const InputSchema = z.object({
 });
 
 const punctuationWords = /\b(question mark|exclamation mark|exclamation point|period|full stop|comma|colon|semicolon)\b/gi;
+const punctuationMarks = /[?¿!¡;:()[\]{}"“”‘’.,…]/g;
 
 function hasHumanSpeech(value: string) {
-  const mainLine = value.split("↳")[0].replace(punctuationWords, "");
+  const mainLine = value.split("↳")[0].replace(punctuationWords, "").replace(punctuationMarks, "");
   return /[\p{L}\p{N}]/u.test(mainLine) && mainLine.replace(/[^\p{L}\p{N}\s]/gu, "").trim().length >= 3;
 }
 
