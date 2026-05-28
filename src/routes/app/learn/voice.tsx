@@ -3,7 +3,7 @@ import { useState } from "react";
 import { MessageList, useTutor } from "@/components/chat-engine";
 import { Button } from "@/components/ui/button";
 import { Mic, MicOff, Volume2 } from "lucide-react";
-import { createRecognizer, speak, speechSupported, stopSpeaking } from "@/lib/speech";
+import { createRecognizer, hasSpeakableContent, speak, speechSupported, stopSpeaking } from "@/lib/speech";
 import { toast } from "sonner";
 
 export const Route = createFileRoute("/app/learn/voice")({
@@ -22,10 +22,11 @@ function VoicePage() {
     if (!r) return;
     setListening(true);
     r.onresult = async (e: any) => {
-      const text = e.results[0][0].transcript;
+      const text = e.results[0]?.[0]?.transcript?.trim() ?? "";
       setListening(false);
+      if (!text) return;
       const reply = await send(text);
-      if (reply) speak(reply, profile.learning_lang);
+      if (reply && hasSpeakableContent(reply)) speak(reply, profile.learning_lang);
     };
     r.onerror = () => setListening(false);
     r.onend = () => setListening(false);
