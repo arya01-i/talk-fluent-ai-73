@@ -244,25 +244,30 @@ function Stat({ icon, label, value }: { icon: React.ReactNode; label: string; va
 }
 
 const BUDDIES = [
-  { emoji: "🦊", name: "Foxy", line: "Let's practice 5 new words today!", color: "from-orange-500/20 to-amber-500/10" },
-  { emoji: "🐼", name: "Pan", line: "Slow down — repeat after me.", color: "from-emerald-500/20 to-teal-500/10" },
-  { emoji: "🦉", name: "Hoot", line: "Grammar tip of the day awaits.", color: "from-indigo-500/20 to-purple-500/10" },
-  { emoji: "🐧", name: "Pip", line: "Quiz me! I love a challenge.", color: "from-sky-500/20 to-blue-500/10" },
+  { emoji: "🦊", name: "Foxy", line: "Let's practice 5 new words today!", color: "from-orange-500/20 to-amber-500/10", to: "/app/vocabulary" },
+  { emoji: "🐼", name: "Pan", line: "Slow down — repeat after me.", color: "from-emerald-500/20 to-teal-500/10", to: "/app/learn/text" },
+  { emoji: "🦉", name: "Hoot", line: "Grammar tip of the day awaits.", color: "from-indigo-500/20 to-purple-500/10", to: "/app/quizzes" },
+  { emoji: "🐧", name: "Pip", line: "Quiz me! I love a challenge.", color: "from-sky-500/20 to-blue-500/10", to: "/app/learn/voice-call" },
 ];
 
 function MascotBuddies() {
   return (
     <div>
-      <h2 className="font-semibold text-lg mb-3 flex items-center gap-2">
-        <Sparkles className="size-4 text-primary" /> Meet your study buddies
-      </h2>
+      <div className="flex items-center justify-between mb-3">
+        <h2 className="font-semibold text-lg flex items-center gap-2">
+          <Sparkles className="size-4 text-primary" /> Meet your study buddies
+        </h2>
+        <Link to="/app/activities" className="text-xs text-primary font-semibold hover:underline">See all →</Link>
+      </div>
       <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
         {BUDDIES.map((b) => (
-          <Card key={b.name} className={`p-4 bg-gradient-to-br ${b.color} border-primary/10 hover:scale-[1.03] transition-transform cursor-default`}>
-            <div className="text-5xl text-center animate-bounce" style={{ animationDuration: "2.5s" }}>{b.emoji}</div>
-            <div className="mt-2 text-center font-bold">{b.name}</div>
-            <div className="text-xs text-center text-muted-foreground mt-1">"{b.line}"</div>
-          </Card>
+          <Link key={b.name} to={b.to as never} className="block">
+            <Card className={`p-4 bg-gradient-to-br ${b.color} border-primary/10 hover:scale-[1.03] hover:shadow-lg transition-all cursor-pointer h-full`}>
+              <div className="text-5xl text-center animate-bounce" style={{ animationDuration: "2.5s" }}>{b.emoji}</div>
+              <div className="mt-2 text-center font-bold">{b.name}</div>
+              <div className="text-xs text-center text-muted-foreground mt-1">"{b.line}"</div>
+            </Card>
+          </Link>
         ))}
       </div>
     </div>
