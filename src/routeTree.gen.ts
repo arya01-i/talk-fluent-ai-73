@@ -27,6 +27,7 @@ import { Route as AppLearnVideoCallRouteImport } from './routes/app/learn/video-
 import { Route as AppLearnTextRouteImport } from './routes/app/learn/text'
 import { Route as AppLearnLessonsRouteImport } from './routes/app/learn/lessons'
 import { Route as AppGamesWordMatchRouteImport } from './routes/app/games/word-match'
+import { Route as AppGamesStoryRouteImport } from './routes/app/games/story'
 import { Route as AppGamesDictationRouteImport } from './routes/app/games/dictation'
 import { Route as AppLearnLessonsIndexRouteImport } from './routes/app/learn/lessons.$index'
 
@@ -120,6 +121,11 @@ const AppGamesWordMatchRoute = AppGamesWordMatchRouteImport.update({
   path: '/games/word-match',
   getParentRoute: () => AppRoute,
 } as any)
+const AppGamesStoryRoute = AppGamesStoryRouteImport.update({
+  id: '/games/story',
+  path: '/games/story',
+  getParentRoute: () => AppRoute,
+} as any)
 const AppGamesDictationRoute = AppGamesDictationRouteImport.update({
   id: '/games/dictation',
   path: '/games/dictation',
@@ -145,6 +151,7 @@ export interface FileRoutesByFullPath {
   '/app/vocabulary': typeof AppVocabularyRoute
   '/app/': typeof AppIndexRoute
   '/app/games/dictation': typeof AppGamesDictationRoute
+  '/app/games/story': typeof AppGamesStoryRoute
   '/app/games/word-match': typeof AppGamesWordMatchRoute
   '/app/learn/lessons': typeof AppLearnLessonsRouteWithChildren
   '/app/learn/text': typeof AppLearnTextRoute
@@ -166,6 +173,7 @@ export interface FileRoutesByTo {
   '/app/vocabulary': typeof AppVocabularyRoute
   '/app': typeof AppIndexRoute
   '/app/games/dictation': typeof AppGamesDictationRoute
+  '/app/games/story': typeof AppGamesStoryRoute
   '/app/games/word-match': typeof AppGamesWordMatchRoute
   '/app/learn/lessons': typeof AppLearnLessonsRouteWithChildren
   '/app/learn/text': typeof AppLearnTextRoute
@@ -189,6 +197,7 @@ export interface FileRoutesById {
   '/app/vocabulary': typeof AppVocabularyRoute
   '/app/': typeof AppIndexRoute
   '/app/games/dictation': typeof AppGamesDictationRoute
+  '/app/games/story': typeof AppGamesStoryRoute
   '/app/games/word-match': typeof AppGamesWordMatchRoute
   '/app/learn/lessons': typeof AppLearnLessonsRouteWithChildren
   '/app/learn/text': typeof AppLearnTextRoute
@@ -213,6 +222,7 @@ export interface FileRouteTypes {
     | '/app/vocabulary'
     | '/app/'
     | '/app/games/dictation'
+    | '/app/games/story'
     | '/app/games/word-match'
     | '/app/learn/lessons'
     | '/app/learn/text'
@@ -234,6 +244,7 @@ export interface FileRouteTypes {
     | '/app/vocabulary'
     | '/app'
     | '/app/games/dictation'
+    | '/app/games/story'
     | '/app/games/word-match'
     | '/app/learn/lessons'
     | '/app/learn/text'
@@ -256,6 +267,7 @@ export interface FileRouteTypes {
     | '/app/vocabulary'
     | '/app/'
     | '/app/games/dictation'
+    | '/app/games/story'
     | '/app/games/word-match'
     | '/app/learn/lessons'
     | '/app/learn/text'
@@ -402,6 +414,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AppGamesWordMatchRouteImport
       parentRoute: typeof AppRoute
     }
+    '/app/games/story': {
+      id: '/app/games/story'
+      path: '/games/story'
+      fullPath: '/app/games/story'
+      preLoaderRoute: typeof AppGamesStoryRouteImport
+      parentRoute: typeof AppRoute
+    }
     '/app/games/dictation': {
       id: '/app/games/dictation'
       path: '/games/dictation'
@@ -439,6 +458,7 @@ interface AppRouteChildren {
   AppVocabularyRoute: typeof AppVocabularyRoute
   AppIndexRoute: typeof AppIndexRoute
   AppGamesDictationRoute: typeof AppGamesDictationRoute
+  AppGamesStoryRoute: typeof AppGamesStoryRoute
   AppGamesWordMatchRoute: typeof AppGamesWordMatchRoute
   AppLearnLessonsRoute: typeof AppLearnLessonsRouteWithChildren
   AppLearnTextRoute: typeof AppLearnTextRoute
@@ -455,6 +475,7 @@ const AppRouteChildren: AppRouteChildren = {
   AppVocabularyRoute: AppVocabularyRoute,
   AppIndexRoute: AppIndexRoute,
   AppGamesDictationRoute: AppGamesDictationRoute,
+  AppGamesStoryRoute: AppGamesStoryRoute,
   AppGamesWordMatchRoute: AppGamesWordMatchRoute,
   AppLearnLessonsRoute: AppLearnLessonsRouteWithChildren,
   AppLearnTextRoute: AppLearnTextRoute,
