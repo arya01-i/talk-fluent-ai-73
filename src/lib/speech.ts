@@ -26,11 +26,20 @@ export function stripForSpeech(text: string): string {
     .filter(Boolean)
     .join(" ")
     .replace(/[*_`#>]/g, "")
+    .replace(/[?¿!¡;:()[\]{}"“”‘’]/g, "")
+    .replace(/[.,…]+\s*$/g, "")
+    .replace(/\s+/g, " ")
     .trim();
   // If filtering left us with only punctuation, fall back to the full text
   // (minus the ↳ symbol) so the tutor never just says "?".
   if (!/[\p{L}\p{N}]/u.test(cleaned)) {
-    const fallback = text.replace(/↳/g, " ").replace(/[*_`#>]/g, "").replace(/\s+/g, " ").trim();
+    const fallback = text
+      .replace(/↳/g, " ")
+      .replace(/[*_`#>]/g, "")
+      .replace(/[?¿!¡;:()[\]{}"“”‘’]/g, "")
+      .replace(/[.,…]+\s*$/g, "")
+      .replace(/\s+/g, " ")
+      .trim();
     return /[\p{L}\p{N}]/u.test(fallback) ? fallback : "";
   }
   return cleaned;
