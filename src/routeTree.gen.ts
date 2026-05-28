@@ -20,6 +20,7 @@ import { Route as AppVocabularyRouteImport } from './routes/app/vocabulary'
 import { Route as AppSettingsRouteImport } from './routes/app/settings'
 import { Route as AppQuizzesRouteImport } from './routes/app/quizzes'
 import { Route as AppOnboardingRouteImport } from './routes/app/onboarding'
+import { Route as AppActivitiesRouteImport } from './routes/app/activities'
 import { Route as AppLearnVoiceCallRouteImport } from './routes/app/learn/voice-call'
 import { Route as AppLearnVoiceRouteImport } from './routes/app/learn/voice'
 import { Route as AppLearnVideoCallRouteImport } from './routes/app/learn/video-call'
@@ -82,6 +83,11 @@ const AppOnboardingRoute = AppOnboardingRouteImport.update({
   path: '/onboarding',
   getParentRoute: () => AppRoute,
 } as any)
+const AppActivitiesRoute = AppActivitiesRouteImport.update({
+  id: '/activities',
+  path: '/activities',
+  getParentRoute: () => AppRoute,
+} as any)
 const AppLearnVoiceCallRoute = AppLearnVoiceCallRouteImport.update({
   id: '/learn/voice-call',
   path: '/learn/voice-call',
@@ -120,6 +126,7 @@ export interface FileRoutesByFullPath {
   '/login': typeof LoginRoute
   '/reset-password': typeof ResetPasswordRoute
   '/signup': typeof SignupRoute
+  '/app/activities': typeof AppActivitiesRoute
   '/app/onboarding': typeof AppOnboardingRoute
   '/app/quizzes': typeof AppQuizzesRoute
   '/app/settings': typeof AppSettingsRoute
@@ -138,6 +145,7 @@ export interface FileRoutesByTo {
   '/login': typeof LoginRoute
   '/reset-password': typeof ResetPasswordRoute
   '/signup': typeof SignupRoute
+  '/app/activities': typeof AppActivitiesRoute
   '/app/onboarding': typeof AppOnboardingRoute
   '/app/quizzes': typeof AppQuizzesRoute
   '/app/settings': typeof AppSettingsRoute
@@ -158,6 +166,7 @@ export interface FileRoutesById {
   '/login': typeof LoginRoute
   '/reset-password': typeof ResetPasswordRoute
   '/signup': typeof SignupRoute
+  '/app/activities': typeof AppActivitiesRoute
   '/app/onboarding': typeof AppOnboardingRoute
   '/app/quizzes': typeof AppQuizzesRoute
   '/app/settings': typeof AppSettingsRoute
@@ -179,6 +188,7 @@ export interface FileRouteTypes {
     | '/login'
     | '/reset-password'
     | '/signup'
+    | '/app/activities'
     | '/app/onboarding'
     | '/app/quizzes'
     | '/app/settings'
@@ -197,6 +207,7 @@ export interface FileRouteTypes {
     | '/login'
     | '/reset-password'
     | '/signup'
+    | '/app/activities'
     | '/app/onboarding'
     | '/app/quizzes'
     | '/app/settings'
@@ -216,6 +227,7 @@ export interface FileRouteTypes {
     | '/login'
     | '/reset-password'
     | '/signup'
+    | '/app/activities'
     | '/app/onboarding'
     | '/app/quizzes'
     | '/app/settings'
@@ -317,6 +329,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AppOnboardingRouteImport
       parentRoute: typeof AppRoute
     }
+    '/app/activities': {
+      id: '/app/activities'
+      path: '/activities'
+      fullPath: '/app/activities'
+      preLoaderRoute: typeof AppActivitiesRouteImport
+      parentRoute: typeof AppRoute
+    }
     '/app/learn/voice-call': {
       id: '/app/learn/voice-call'
       path: '/learn/voice-call'
@@ -375,6 +394,7 @@ const AppLearnLessonsRouteWithChildren = AppLearnLessonsRoute._addFileChildren(
 )
 
 interface AppRouteChildren {
+  AppActivitiesRoute: typeof AppActivitiesRoute
   AppOnboardingRoute: typeof AppOnboardingRoute
   AppQuizzesRoute: typeof AppQuizzesRoute
   AppSettingsRoute: typeof AppSettingsRoute
@@ -388,6 +408,7 @@ interface AppRouteChildren {
 }
 
 const AppRouteChildren: AppRouteChildren = {
+  AppActivitiesRoute: AppActivitiesRoute,
   AppOnboardingRoute: AppOnboardingRoute,
   AppQuizzesRoute: AppQuizzesRoute,
   AppSettingsRoute: AppSettingsRoute,
