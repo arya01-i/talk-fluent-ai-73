@@ -147,3 +147,23 @@
     color: var(--color-foreground);
   }
 }
+
+@layer utilities {
+  .bg-brand-gradient { background-image: var(--gradient-brand); }
+  .text-brand-gradient {
+    background-image: var(--gradient-brand);
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
+  }
+  .bg-hero-radial {
+    background:
+      radial-gradient(900px circle at 15% 10%, color-mix(in oklab, var(--grad-from) 28%, transparent), transparent 60%),
+      radial-gradient(900px circle at 85% 90%, color-mix(in oklab, var(--grad-to) 28%, transparent), transparent 60%),
+      var(--background);
+  }
+  @keyframes float-slow { 0%,100% { transform: translateY(0) } 50% { transform: translateY(-12px) } }
+  .animate-float-slow { animation: float-slow 6s ease-in-out infinite; }
+  @keyframes pulse-glow { 0%,100% { opacity:.6 } 50% { opacity:1 } }
+  .animate-pulse-glow { animation: pulse-glow 4s ease-in-out infinite; }
+}
