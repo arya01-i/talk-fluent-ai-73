@@ -1,4 +1,4 @@
-import { createFileRoute, Link } from "@tanstack/react-router";
+import { createFileRoute, Link, useNavigate } from "@tanstack/react-router";
 import { useProfile } from "@/hooks/use-profile";
 import { Card } from "@/components/ui/card";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
@@ -56,7 +56,15 @@ export const Route = createFileRoute("/app/")({
 
 function Dashboard() {
   const { profile, update, loading } = useProfile();
+  const nav = useNavigate();
   const [stats, setStats] = useState({ vocab: 0, quizzes: 0 });
+
+  useEffect(() => {
+    if (!profile) return;
+    if (!localStorage.getItem(`lingvo_onboarded_${profile.id}`)) {
+      nav({ to: "/app/onboarding" });
+    }
+  }, [profile, nav]);
 
   useEffect(() => {
     if (!profile) return;
