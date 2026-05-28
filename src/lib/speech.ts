@@ -17,12 +17,20 @@ export function bcp47(language: string): string {
 }
 
 export function stripForSpeech(text: string): string {
-  // Drop the "↳ translation" hint line
-  return text.split(/\n+/).filter((l) => !l.trim().startsWith("↳")).join(" ").replace(/[*_`#>]/g, "").trim();
+  const cleaned = text
+    .split(/\n+/)
+    .filter((l) => !l.trim().startsWith("↳"))
+    .join(" ")
+    .replace(/[*_`#>]/g, "")
+    .trim();
+  // Skip if nothing meaningful left (e.g. just "?" or ".")
+  if (!/[\p{L}\p{N}]/u.test(cleaned)) return "";
+  return cleaned;
 }
 
-const FEMALE_HINTS = /female|woman|girl|samantha|victoria|zira|tessa|karen|moira|fiona|susan|allison|ava|serena|google.*(female)|amelie|amelia|paulina|monica|luciana|joana|alice|anna|elena|katja|petra|yuna|mei|xiaoxiao|nadia|ines|sara|maria/i;
-const MALE_HINTS = /male|man|boy|daniel|alex|fred|tom|david|mark|guy|diego|jorge|carlos|paulo|hiroshi|kyoko|wei|yifan|ahmed|raj|ravi|google.*(male)|thomas|jorge|enrique/i;
+// Word-bounded so "Uruguay" doesn't match "guy" and "female" doesn't match inside "male".
+const FEMALE_HINTS = /\b(female|woman|girl|samantha|victoria|zira|tessa|karen|moira|fiona|susan|allison|ava|serena|amelie|amelia|paulina|monica|luciana|joana|alice|anna|elena|katja|petra|yuna|mei|xiaoxiao|nadia|ines|sara|maria)\b/i;
+const MALE_HINTS = /\b(male|man|boy|daniel|alex|fred|tom|david|mark|diego|jorge|carlos|paulo|hiroshi|wei|yifan|ahmed|raj|ravi|thomas|enrique)\b/i;
 
 function pickVoice(lang: string, gender?: "female" | "male"): SpeechSynthesisVoice | undefined {
   const voices = window.speechSynthesis.getVoices();
@@ -64,7 +72,9 @@ export function speak(text: string, language: string, onEnd?: () => void, gender
   window.speechSynthesis.cancel();
   const lang = bcp47(language);
   const run = () => {
-    const u = new SpeechSynthesisUtterance(stripForSpeech(text));
+    const spoken = stripForSpeech(text);
+    if (!spoken) { onEnd?.(); return; }
+    const u = new SpeechSynthesisUtterance(spoken);
     u.lang = lang;
     const v = pickVoice(lang, gender);
     if (v) u.voice = v;
