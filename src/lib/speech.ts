@@ -88,22 +88,28 @@ function ensureVoices(): Promise<void> {
 
 export function speak(text: string, language: string, onEnd?: () => void, gender?: "female" | "male") {
   if (typeof window === "undefined" || !("speechSynthesis" in window)) { onEnd?.(); return; }
-  window.speechSynthesis.cancel();
   const lang = bcp47(language);
-  const run = () => {
-    const spoken = stripForSpeech(text);
-    if (!spoken) { onEnd?.(); return; }
-    const u = new SpeechSynthesisUtterance(spoken);
-    u.lang = lang;
+  const spoken = stripForSpeech(text);
+  if (!spoken) { onEnd?.(); return; }
+  // Create utterance synchronously inside the user gesture so browsers
+  // (notably Safari/Chrome on mobile) allow speech to start.
+  const u = new SpeechSynthesisUtterance(spoken);
+  u.lang = lang;
+  u.pitch = gender === "male" ? 0.85 : gender === "female" ? 1.15 : 1;
+  u.rate = 1;
+  u.onend = () => onEnd?.();
+  u.onerror = () => onEnd?.();
+  const start = () => {
     const v = pickVoice(lang, gender);
     if (v) u.voice = v;
-    u.pitch = gender === "male" ? 0.85 : gender === "female" ? 1.15 : 1;
-    u.rate = 1;
-    u.onend = () => onEnd?.();
-    u.onerror = () => onEnd?.();
+    window.speechSynthesis.cancel();
     window.speechSynthesis.speak(u);
   };
-  ensureVoices().then(run);
+  if (window.speechSynthesis.getVoices().length > 0) {
+    start();
+  } else {
+    ensureVoices().then(start);
+  }
 }
 
 export function stopSpeaking() {
