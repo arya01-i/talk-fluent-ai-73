@@ -17,3 +17,16 @@ export const LEVEL_DESCRIPTIONS: Record<CefrLevel, string> = {
   C1: "Advanced — fluent, nuanced expression",
   C2: "Mastery — near-native, idiomatic",
 };
+
+export const LANGUAGE_FLAGS: Record<string, string> = {
+  English: "🇬🇧", Spanish: "🇪🇸", French: "🇫🇷", German: "🇩🇪", Italian: "🇮🇹",
+  Portuguese: "🇵🇹", Dutch: "🇳🇱", Russian: "🇷🇺", Polish: "🇵🇱", Turkish: "🇹🇷",
+  Arabic: "🇸🇦", Hindi: "🇮🇳", Bengali: "🇧🇩", Urdu: "🇵🇰", Tamil: "🇮🇳",
+  Telugu: "🇮🇳", Marathi: "🇮🇳", Punjabi: "🇮🇳", Japanese: "🇯🇵", Korean: "🇰🇷",
+  "Chinese (Mandarin)": "🇨🇳", Vietnamese: "🇻🇳", Thai: "🇹🇭", Indonesian: "🇮🇩",
+  Swahili: "🇰🇪", Greek: "🇬🇷", Hebrew: "🇮🇱", Czech: "🇨🇿", Swedish: "🇸🇪",
+  Norwegian: "🇳🇴", Danish: "🇩🇰", Finnish: "🇫🇮", Hungarian: "🇭🇺",
+  Romanian: "🇷🇴", Ukrainian: "🇺🇦",
+};
+
+export const flagFor = (lang: string) => LANGUAGE_FLAGS[lang] ?? "🌍";

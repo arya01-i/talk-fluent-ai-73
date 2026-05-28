@@ -19,6 +19,7 @@ import { Route as AppIndexRouteImport } from './routes/app/index'
 import { Route as AppVocabularyRouteImport } from './routes/app/vocabulary'
 import { Route as AppSettingsRouteImport } from './routes/app/settings'
 import { Route as AppQuizzesRouteImport } from './routes/app/quizzes'
+import { Route as AppOnboardingRouteImport } from './routes/app/onboarding'
 import { Route as AppLearnVoiceCallRouteImport } from './routes/app/learn/voice-call'
 import { Route as AppLearnVoiceRouteImport } from './routes/app/learn/voice'
 import { Route as AppLearnVideoCallRouteImport } from './routes/app/learn/video-call'
@@ -76,6 +77,11 @@ const AppQuizzesRoute = AppQuizzesRouteImport.update({
   path: '/quizzes',
   getParentRoute: () => AppRoute,
 } as any)
+const AppOnboardingRoute = AppOnboardingRouteImport.update({
+  id: '/onboarding',
+  path: '/onboarding',
+  getParentRoute: () => AppRoute,
+} as any)
 const AppLearnVoiceCallRoute = AppLearnVoiceCallRouteImport.update({
   id: '/learn/voice-call',
   path: '/learn/voice-call',
@@ -114,6 +120,7 @@ export interface FileRoutesByFullPath {
   '/login': typeof LoginRoute
   '/reset-password': typeof ResetPasswordRoute
   '/signup': typeof SignupRoute
+  '/app/onboarding': typeof AppOnboardingRoute
   '/app/quizzes': typeof AppQuizzesRoute
   '/app/settings': typeof AppSettingsRoute
   '/app/vocabulary': typeof AppVocabularyRoute
@@ -131,6 +138,7 @@ export interface FileRoutesByTo {
   '/login': typeof LoginRoute
   '/reset-password': typeof ResetPasswordRoute
   '/signup': typeof SignupRoute
+  '/app/onboarding': typeof AppOnboardingRoute
   '/app/quizzes': typeof AppQuizzesRoute
   '/app/settings': typeof AppSettingsRoute
   '/app/vocabulary': typeof AppVocabularyRoute
@@ -150,6 +158,7 @@ export interface FileRoutesById {
   '/login': typeof LoginRoute
   '/reset-password': typeof ResetPasswordRoute
   '/signup': typeof SignupRoute
+  '/app/onboarding': typeof AppOnboardingRoute
   '/app/quizzes': typeof AppQuizzesRoute
   '/app/settings': typeof AppSettingsRoute
   '/app/vocabulary': typeof AppVocabularyRoute
@@ -170,6 +179,7 @@ export interface FileRouteTypes {
     | '/login'
     | '/reset-password'
     | '/signup'
+    | '/app/onboarding'
     | '/app/quizzes'
     | '/app/settings'
     | '/app/vocabulary'
@@ -187,6 +197,7 @@ export interface FileRouteTypes {
     | '/login'
     | '/reset-password'
     | '/signup'
+    | '/app/onboarding'
     | '/app/quizzes'
     | '/app/settings'
     | '/app/vocabulary'
@@ -205,6 +216,7 @@ export interface FileRouteTypes {
     | '/login'
     | '/reset-password'
     | '/signup'
+    | '/app/onboarding'
     | '/app/quizzes'
     | '/app/settings'
     | '/app/vocabulary'
@@ -298,6 +310,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AppQuizzesRouteImport
       parentRoute: typeof AppRoute
     }
+    '/app/onboarding': {
+      id: '/app/onboarding'
+      path: '/onboarding'
+      fullPath: '/app/onboarding'
+      preLoaderRoute: typeof AppOnboardingRouteImport
+      parentRoute: typeof AppRoute
+    }
     '/app/learn/voice-call': {
       id: '/app/learn/voice-call'
       path: '/learn/voice-call'
@@ -356,6 +375,7 @@ const AppLearnLessonsRouteWithChildren = AppLearnLessonsRoute._addFileChildren(
 )
 
 interface AppRouteChildren {
+  AppOnboardingRoute: typeof AppOnboardingRoute
   AppQuizzesRoute: typeof AppQuizzesRoute
   AppSettingsRoute: typeof AppSettingsRoute
   AppVocabularyRoute: typeof AppVocabularyRoute
@@ -368,6 +388,7 @@ interface AppRouteChildren {
 }
 
 const AppRouteChildren: AppRouteChildren = {
+  AppOnboardingRoute: AppOnboardingRoute,
   AppQuizzesRoute: AppQuizzesRoute,
   AppSettingsRoute: AppSettingsRoute,
   AppVocabularyRoute: AppVocabularyRoute,
@@ -392,13 +413,3 @@ const rootRouteChildren: RootRouteChildren = {
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
   ._addFileTypes<FileRouteTypes>()
-
-import type { getRouter } from './router.tsx'
-import type { startInstance } from './start.ts'
-declare module '@tanstack/react-start' {
-  interface Register {
-    ssr: true
-    router: Awaited<ReturnType<typeof getRouter>>
-    config: Awaited<ReturnType<typeof startInstance.getOptions>>
-  }
-}
