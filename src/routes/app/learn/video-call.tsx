@@ -57,7 +57,12 @@ function VideoCallPage() {
       if (!activeRef.current) return;
       if (reply) {
         setStatus("Lingvo is speaking…"); setSpeaking(true);
-        speak(reply, profile.learning_lang, () => { setSpeaking(false); if (activeRef.current) loop(); });
+        speak(
+          reply,
+          profile.learning_lang,
+          () => { setSpeaking(false); if (activeRef.current) loop(); },
+          gender,
+        );
       } else { loop(); }
     };
     r.onerror = () => { if (activeRef.current) loop(); };
