@@ -48,6 +48,11 @@ function AuthLayout() {
 
   const logout = async () => { await supabase.auth.signOut(); nav({ to: "/" }); };
 
+  // Onboarding (language selection) is a full-screen flow — no sidebar/header.
+  if (path.startsWith("/app/onboarding")) {
+    return <div className="min-h-screen bg-background"><Outlet /></div>;
+  }
+
   const NavLinks = ({ onNav }: { onNav?: () => void }) => (
     <nav className="flex-1 px-3 space-y-1">
       {NAV.map((n) => {

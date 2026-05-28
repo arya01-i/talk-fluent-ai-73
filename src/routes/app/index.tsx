@@ -83,10 +83,6 @@ function Dashboard() {
   return (
     <div className="max-w-5xl mx-auto p-6 md:p-10 space-y-8">
       <div className="relative overflow-hidden rounded-2xl border bg-gradient-to-br from-primary/15 via-accent/10 to-background p-6 md:p-8">
-        {/* Floating cartoon mascots */}
-        <div className="pointer-events-none absolute -top-4 -right-2 text-5xl md:text-6xl rotate-12 opacity-90 animate-bounce" style={{ animationDuration: "3s" }}>🦊</div>
-        <div className="pointer-events-none absolute bottom-2 right-10 text-3xl md:text-4xl -rotate-6 animate-bounce" style={{ animationDuration: "4s", animationDelay: "0.5s" }}>🎈</div>
-        <div className="pointer-events-none absolute top-6 right-24 text-2xl animate-pulse">✨</div>
         <div className="flex items-start gap-4 relative">
           <div className="text-6xl md:text-7xl leading-none drop-shadow-lg">{info.flag}</div>
           <div className="flex-1 min-w-0">
