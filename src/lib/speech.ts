@@ -20,29 +20,27 @@ export function stripForSpeech(text: string): string {
   // Take everything before the first ↳ marker (the native-language hint).
   // Works whether the marker is on its own line or inline.
   const beforeHint = text.split("↳")[0];
-  const cleaned = beforeHint
-    .split(/\n+/)
-    .map((l) => l.trim())
-    .filter(Boolean)
-    .join(" ")
+  const removeSpeechPunctuation = (value: string) => value
+    .replace(/\b(question mark|exclamation mark|exclamation point|period|full stop|comma|colon|semicolon)\b/gi, "")
     .replace(/[*_`#>]/g, "")
     .replace(/[?¿!¡;:()[\]{}"“”‘’]/g, "")
     .replace(/[.,…]+\s*$/g, "")
     .replace(/\s+/g, " ")
     .trim();
+  const cleaned = beforeHint
+    .split(/\n+/)
+    .map((l) => l.trim())
+    .filter(Boolean)
+    .join(" ")
+    .replace(/\s+/g, " ");
+  const spoken = removeSpeechPunctuation(cleaned);
   // If filtering left us with only punctuation, fall back to the full text
   // (minus the ↳ symbol) so the tutor never just says "?".
-  if (!/[\p{L}\p{N}]/u.test(cleaned)) {
-    const fallback = text
-      .replace(/↳/g, " ")
-      .replace(/[*_`#>]/g, "")
-      .replace(/[?¿!¡;:()[\]{}"“”‘’]/g, "")
-      .replace(/[.,…]+\s*$/g, "")
-      .replace(/\s+/g, " ")
-      .trim();
+  if (!/[\p{L}\p{N}]/u.test(spoken)) {
+    const fallback = removeSpeechPunctuation(text.replace(/↳.*/s, " "));
     return /[\p{L}\p{N}]/u.test(fallback) ? fallback : "";
   }
-  return cleaned;
+  return spoken;
 }
 
 // Word-bounded so "Uruguay" doesn't match "guy" and "female" doesn't match inside "male".
