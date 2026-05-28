@@ -43,6 +43,10 @@ export function stripForSpeech(text: string): string {
   return spoken;
 }
 
+export function hasSpeakableContent(text: string): boolean {
+  return /[\p{L}\p{N}]/u.test(stripForSpeech(text));
+}
+
 // Word-bounded so "Uruguay" doesn't match "guy" and "female" doesn't match inside "male".
 const FEMALE_HINTS = /\b(female|woman|girl|samantha|victoria|zira|tessa|karen|moira|fiona|susan|allison|ava|serena|amelie|amelia|paulina|monica|luciana|joana|alice|anna|elena|katja|petra|yuna|mei|xiaoxiao|nadia|ines|sara|maria)\b/i;
 const MALE_HINTS = /\b(male|man|boy|daniel|alex|fred|tom|david|mark|diego|jorge|carlos|paulo|hiroshi|wei|yifan|ahmed|raj|ravi|thomas|enrique)\b/i;
