@@ -26,6 +26,9 @@ import { Route as AppLearnVoiceRouteImport } from './routes/app/learn/voice'
 import { Route as AppLearnVideoCallRouteImport } from './routes/app/learn/video-call'
 import { Route as AppLearnTextRouteImport } from './routes/app/learn/text'
 import { Route as AppLearnLessonsRouteImport } from './routes/app/learn/lessons'
+import { Route as AppGamesWordMatchRouteImport } from './routes/app/games/word-match'
+import { Route as AppGamesStoryRouteImport } from './routes/app/games/story'
+import { Route as AppGamesDictationRouteImport } from './routes/app/games/dictation'
 import { Route as AppLearnLessonsIndexRouteImport } from './routes/app/learn/lessons.$index'
 
 const SignupRoute = SignupRouteImport.update({
@@ -113,6 +116,21 @@ const AppLearnLessonsRoute = AppLearnLessonsRouteImport.update({
   path: '/learn/lessons',
   getParentRoute: () => AppRoute,
 } as any)
+const AppGamesWordMatchRoute = AppGamesWordMatchRouteImport.update({
+  id: '/games/word-match',
+  path: '/games/word-match',
+  getParentRoute: () => AppRoute,
+} as any)
+const AppGamesStoryRoute = AppGamesStoryRouteImport.update({
+  id: '/games/story',
+  path: '/games/story',
+  getParentRoute: () => AppRoute,
+} as any)
+const AppGamesDictationRoute = AppGamesDictationRouteImport.update({
+  id: '/games/dictation',
+  path: '/games/dictation',
+  getParentRoute: () => AppRoute,
+} as any)
 const AppLearnLessonsIndexRoute = AppLearnLessonsIndexRouteImport.update({
   id: '/$index',
   path: '/$index',
@@ -132,6 +150,9 @@ export interface FileRoutesByFullPath {
   '/app/settings': typeof AppSettingsRoute
   '/app/vocabulary': typeof AppVocabularyRoute
   '/app/': typeof AppIndexRoute
+  '/app/games/dictation': typeof AppGamesDictationRoute
+  '/app/games/story': typeof AppGamesStoryRoute
+  '/app/games/word-match': typeof AppGamesWordMatchRoute
   '/app/learn/lessons': typeof AppLearnLessonsRouteWithChildren
   '/app/learn/text': typeof AppLearnTextRoute
   '/app/learn/video-call': typeof AppLearnVideoCallRoute
@@ -151,6 +172,9 @@ export interface FileRoutesByTo {
   '/app/settings': typeof AppSettingsRoute
   '/app/vocabulary': typeof AppVocabularyRoute
   '/app': typeof AppIndexRoute
+  '/app/games/dictation': typeof AppGamesDictationRoute
+  '/app/games/story': typeof AppGamesStoryRoute
+  '/app/games/word-match': typeof AppGamesWordMatchRoute
   '/app/learn/lessons': typeof AppLearnLessonsRouteWithChildren
   '/app/learn/text': typeof AppLearnTextRoute
   '/app/learn/video-call': typeof AppLearnVideoCallRoute
@@ -172,6 +196,9 @@ export interface FileRoutesById {
   '/app/settings': typeof AppSettingsRoute
   '/app/vocabulary': typeof AppVocabularyRoute
   '/app/': typeof AppIndexRoute
+  '/app/games/dictation': typeof AppGamesDictationRoute
+  '/app/games/story': typeof AppGamesStoryRoute
+  '/app/games/word-match': typeof AppGamesWordMatchRoute
   '/app/learn/lessons': typeof AppLearnLessonsRouteWithChildren
   '/app/learn/text': typeof AppLearnTextRoute
   '/app/learn/video-call': typeof AppLearnVideoCallRoute
@@ -194,6 +221,9 @@ export interface FileRouteTypes {
     | '/app/settings'
     | '/app/vocabulary'
     | '/app/'
+    | '/app/games/dictation'
+    | '/app/games/story'
+    | '/app/games/word-match'
     | '/app/learn/lessons'
     | '/app/learn/text'
     | '/app/learn/video-call'
@@ -213,6 +243,9 @@ export interface FileRouteTypes {
     | '/app/settings'
     | '/app/vocabulary'
     | '/app'
+    | '/app/games/dictation'
+    | '/app/games/story'
+    | '/app/games/word-match'
     | '/app/learn/lessons'
     | '/app/learn/text'
     | '/app/learn/video-call'
@@ -233,6 +266,9 @@ export interface FileRouteTypes {
     | '/app/settings'
     | '/app/vocabulary'
     | '/app/'
+    | '/app/games/dictation'
+    | '/app/games/story'
+    | '/app/games/word-match'
     | '/app/learn/lessons'
     | '/app/learn/text'
     | '/app/learn/video-call'
@@ -371,6 +407,27 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AppLearnLessonsRouteImport
       parentRoute: typeof AppRoute
     }
+    '/app/games/word-match': {
+      id: '/app/games/word-match'
+      path: '/games/word-match'
+      fullPath: '/app/games/word-match'
+      preLoaderRoute: typeof AppGamesWordMatchRouteImport
+      parentRoute: typeof AppRoute
+    }
+    '/app/games/story': {
+      id: '/app/games/story'
+      path: '/games/story'
+      fullPath: '/app/games/story'
+      preLoaderRoute: typeof AppGamesStoryRouteImport
+      parentRoute: typeof AppRoute
+    }
+    '/app/games/dictation': {
+      id: '/app/games/dictation'
+      path: '/games/dictation'
+      fullPath: '/app/games/dictation'
+      preLoaderRoute: typeof AppGamesDictationRouteImport
+      parentRoute: typeof AppRoute
+    }
     '/app/learn/lessons/$index': {
       id: '/app/learn/lessons/$index'
       path: '/$index'
@@ -400,6 +457,9 @@ interface AppRouteChildren {
   AppSettingsRoute: typeof AppSettingsRoute
   AppVocabularyRoute: typeof AppVocabularyRoute
   AppIndexRoute: typeof AppIndexRoute
+  AppGamesDictationRoute: typeof AppGamesDictationRoute
+  AppGamesStoryRoute: typeof AppGamesStoryRoute
+  AppGamesWordMatchRoute: typeof AppGamesWordMatchRoute
   AppLearnLessonsRoute: typeof AppLearnLessonsRouteWithChildren
   AppLearnTextRoute: typeof AppLearnTextRoute
   AppLearnVideoCallRoute: typeof AppLearnVideoCallRoute
@@ -414,6 +474,9 @@ const AppRouteChildren: AppRouteChildren = {
   AppSettingsRoute: AppSettingsRoute,
   AppVocabularyRoute: AppVocabularyRoute,
   AppIndexRoute: AppIndexRoute,
+  AppGamesDictationRoute: AppGamesDictationRoute,
+  AppGamesStoryRoute: AppGamesStoryRoute,
+  AppGamesWordMatchRoute: AppGamesWordMatchRoute,
   AppLearnLessonsRoute: AppLearnLessonsRouteWithChildren,
   AppLearnTextRoute: AppLearnTextRoute,
   AppLearnVideoCallRoute: AppLearnVideoCallRoute,

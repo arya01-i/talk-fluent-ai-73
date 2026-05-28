@@ -8,6 +8,9 @@ export const Route = createFileRoute("/app/activities")({
 });
 
 const ACTIVITIES = [
+  { emoji: "🧩", name: "Word Match", desc: "Memory-style game: match target words to meanings, hear each word.", to: "/app/games/word-match", color: "from-violet-500/20 to-indigo-500/10" },
+  { emoji: "🎧", name: "Listen & Type", desc: "Dictation game — hear a sentence and type what you heard.", to: "/app/games/dictation", color: "from-cyan-500/20 to-sky-500/10" },
+  { emoji: "📖", name: "Mini Story", desc: "Tiny AI-made bilingual story with line-by-line audio.", to: "/app/games/story", color: "from-fuchsia-500/20 to-pink-500/10" },
   { emoji: "🦊", name: "Foxy's Word Hunt", desc: "Learn 5 new words with vocabulary flashcards.", to: "/app/vocabulary", color: "from-orange-500/20 to-amber-500/10" },
   { emoji: "🐼", name: "Pan's Slow Chat", desc: "Type calmly with your AI tutor — get gentle corrections.", to: "/app/learn/text", color: "from-emerald-500/20 to-teal-500/10" },
   { emoji: "🦉", name: "Hoot's Grammar Quiz", desc: "Test what you know with a quick quiz.", to: "/app/quizzes", color: "from-indigo-500/20 to-purple-500/10" },
