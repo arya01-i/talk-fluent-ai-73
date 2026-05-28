@@ -1,9 +1,8 @@
 import { createFileRoute, Link, useNavigate } from "@tanstack/react-router";
 import { useProfile } from "@/hooks/use-profile";
 import { Card } from "@/components/ui/card";
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
-import { LANGUAGES, CEFR_LEVELS, LEVEL_DESCRIPTIONS, type CefrLevel } from "@/lib/languages";
-import { MessageSquare, Mic, Phone, Video, BookOpen, ListChecks, Flame, Trophy, GraduationCap } from "lucide-react";
+import { Button } from "@/components/ui/button";
+import { MessageSquare, Mic, Phone, Video, BookOpen, ListChecks, Flame, Trophy, GraduationCap, Sparkles, Dice5, Music, Zap, Settings as SettingsIcon } from "lucide-react";
 import { useEffect, useState } from "react";
 import { supabase } from "@/integrations/supabase/client";
 
@@ -92,35 +91,11 @@ function Dashboard() {
             <p className="text-muted-foreground mt-1">Your <span className="font-medium text-foreground">{profile.learning_lang}</span> journey · Level {profile.level}</p>
             <p className="mt-3 text-sm bg-accent/30 inline-block px-3 py-1 rounded-full">💡 {info.tip}</p>
           </div>
+          <Link to="/app/settings" className="hidden sm:inline-flex items-center gap-1 text-xs text-muted-foreground hover:text-foreground">
+            <SettingsIcon className="size-3.5" /> Change language
+          </Link>
         </div>
       </div>
-
-      <Card className="p-5">
-        <h2 className="font-semibold mb-3">Your settings</h2>
-        <div className="grid sm:grid-cols-3 gap-3">
-          <div>
-            <label className="text-xs text-muted-foreground">My language</label>
-            <Select value={profile.native_lang} onValueChange={(v) => update({ native_lang: v })}>
-              <SelectTrigger><SelectValue /></SelectTrigger>
-              <SelectContent>{LANGUAGES.map((l) => <SelectItem key={l} value={l}>{l}</SelectItem>)}</SelectContent>
-            </Select>
-          </div>
-          <div>
-            <label className="text-xs text-muted-foreground">Learning</label>
-            <Select value={profile.learning_lang} onValueChange={(v) => update({ learning_lang: v })}>
-              <SelectTrigger><SelectValue /></SelectTrigger>
-              <SelectContent>{LANGUAGES.filter((l) => l !== profile.native_lang).map((l) => <SelectItem key={l} value={l}>{l}</SelectItem>)}</SelectContent>
-            </Select>
-          </div>
-          <div>
-            <label className="text-xs text-muted-foreground">Level</label>
-            <Select value={profile.level} onValueChange={(v) => update({ level: v as CefrLevel })}>
-              <SelectTrigger><SelectValue /></SelectTrigger>
-              <SelectContent>{CEFR_LEVELS.map((l) => <SelectItem key={l} value={l}>{l} — {LEVEL_DESCRIPTIONS[l]}</SelectItem>)}</SelectContent>
-            </Select>
-          </div>
-        </div>
-      </Card>
 
       <div className="grid sm:grid-cols-3 gap-3">
         <Stat icon={<Trophy className="size-4 text-primary" />} label="XP" value={profile.xp} />
@@ -139,6 +114,8 @@ function Dashboard() {
         />
       </div>
 
+      <FunActivities lang={profile.learning_lang} />
+
       <div>
         <h2 className="font-semibold text-lg mb-3">Practice with Lingvo</h2>
         <div className="grid sm:grid-cols-2 gap-4">
@@ -155,6 +132,100 @@ function Dashboard() {
           <Tile to="/app/vocabulary" title="Vocabulary" desc="Curated words for your level. Mark as known." icon={<BookOpen />} />
           <Tile to="/app/quizzes" title="Quizzes" desc={`Test yourself at ${profile.level}. ${stats.quizzes} taken.`} icon={<ListChecks />} />
         </div>
+      </div>
+    </div>
+  );
+}
+
+const PHRASES: Record<string, { phrase: string; meaning: string }[]> = {
+  English: [
+    { phrase: "Break a leg!", meaning: "Good luck!" },
+    { phrase: "Piece of cake", meaning: "Very easy" },
+    { phrase: "Hit the books", meaning: "Study hard" },
+  ],
+  Spanish: [
+    { phrase: "¡Buena suerte!", meaning: "Good luck!" },
+    { phrase: "Estar en las nubes", meaning: "To daydream" },
+    { phrase: "Tomar el pelo", meaning: "To tease someone" },
+  ],
+  French: [
+    { phrase: "C'est la vie", meaning: "That's life" },
+    { phrase: "Avoir le cafard", meaning: "To feel blue" },
+    { phrase: "Coûter les yeux de la tête", meaning: "To cost a fortune" },
+  ],
+  German: [
+    { phrase: "Ich verstehe nur Bahnhof", meaning: "I don't understand a word" },
+    { phrase: "Tomaten auf den Augen haben", meaning: "To be oblivious" },
+    { phrase: "Das ist mir Wurst", meaning: "I don't care" },
+  ],
+  Italian: [
+    { phrase: "In bocca al lupo!", meaning: "Good luck!" },
+    { phrase: "Avere le braccine corte", meaning: "To be stingy" },
+  ],
+  Hindi: [
+    { phrase: "दिल से", meaning: "From the heart" },
+    { phrase: "बहुत अच्छा", meaning: "Very good" },
+  ],
+  Japanese: [
+    { phrase: "頑張って!", meaning: "Do your best!" },
+    { phrase: "お疲れ様", meaning: "Thanks for your hard work" },
+  ],
+  Korean: [
+    { phrase: "화이팅!", meaning: "You can do it!" },
+    { phrase: "잘 부탁드립니다", meaning: "Please take care of me" },
+  ],
+};
+
+const CHALLENGES = [
+  { icon: "🎯", title: "60-second talk", desc: "Speak for 1 minute on today's topic.", to: "/app/learn/voice-call" },
+  { icon: "🎭", title: "Roleplay café", desc: "Order coffee in your target language.", to: "/app/learn/text" },
+  { icon: "🎬", title: "Describe a scene", desc: "Describe what you did today in 5 sentences.", to: "/app/learn/text" },
+  { icon: "🎤", title: "Karaoke phrase", desc: "Repeat a phrase 3 times — match the rhythm.", to: "/app/learn/voice" },
+  { icon: "🧠", title: "Memory match", desc: "Take a quick 5-question quiz.", to: "/app/quizzes" },
+  { icon: "📸", title: "What's around me?", desc: "Name 5 things you see in your room.", to: "/app/learn/text" },
+];
+
+function FunActivities({ lang }: { lang: string }) {
+  const phrases = PHRASES[lang] ?? [{ phrase: "Hello!", meaning: "A friendly greeting" }];
+  const [pIdx, setPIdx] = useState(() => Math.floor(Math.random() * phrases.length));
+  const [cIdx, setCIdx] = useState(() => Math.floor(Math.random() * CHALLENGES.length));
+  const phrase = phrases[pIdx % phrases.length];
+  const challenge = CHALLENGES[cIdx % CHALLENGES.length];
+
+  return (
+    <div>
+      <h2 className="font-semibold text-lg mb-3 flex items-center gap-2">
+        <Sparkles className="size-4 text-primary" /> Fun activities
+      </h2>
+      <div className="grid sm:grid-cols-2 gap-4">
+        <Card className="p-5 bg-gradient-to-br from-primary/10 to-accent/10 border-primary/20">
+          <div className="flex items-center gap-2 text-xs text-primary font-semibold uppercase tracking-wide">
+            <Music className="size-3.5" /> Phrase of the moment
+          </div>
+          <div className="mt-2 text-2xl font-bold">{phrase.phrase}</div>
+          <div className="text-sm text-muted-foreground mt-1">{phrase.meaning}</div>
+          <Button size="sm" variant="outline" className="mt-3"
+            onClick={() => setPIdx((i) => (i + 1) % phrases.length)}>
+            <Dice5 className="size-3.5 mr-1" /> Another one
+          </Button>
+        </Card>
+
+        <Card className="p-5 bg-gradient-to-br from-accent/10 to-primary/10 border-accent/20">
+          <div className="flex items-center gap-2 text-xs text-primary font-semibold uppercase tracking-wide">
+            <Zap className="size-3.5" /> Today's challenge
+          </div>
+          <div className="mt-2 text-2xl font-bold">{challenge.icon} {challenge.title}</div>
+          <div className="text-sm text-muted-foreground mt-1">{challenge.desc}</div>
+          <div className="mt-3 flex gap-2">
+            <Link to={challenge.to as never}>
+              <Button size="sm">Start now</Button>
+            </Link>
+            <Button size="sm" variant="outline"
+              onClick={() => setCIdx((i) => (i + 1) % CHALLENGES.length)}>
+              <Dice5 className="size-3.5 mr-1" /> Spin
+            </Button>
+          </div>
+        </Card>
       </div>
     </div>
   );
