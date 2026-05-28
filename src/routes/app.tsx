@@ -2,8 +2,9 @@ import { createFileRoute, Outlet, Link, useNavigate, useRouterState } from "@tan
 import { useEffect, useState } from "react";
 import { supabase } from "@/integrations/supabase/client";
 import { Button } from "@/components/ui/button";
-import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
-import { Sparkles, LayoutDashboard, MessageSquare, Mic, Phone, Video, BookOpen, ListChecks, Settings, LogOut, GraduationCap, Menu } from "lucide-react";
+import { Sheet, SheetContent, SheetTitle, SheetTrigger } from "@/components/ui/sheet";
+import { VisuallyHidden } from "@radix-ui/react-visually-hidden";
+import { Sparkles, LayoutDashboard, MessageSquare, Mic, Phone, Video, BookOpen, ListChecks, Settings, LogOut, GraduationCap, Menu, PartyPopper } from "lucide-react";
 import { cn } from "@/lib/utils";
 
 export const Route = createFileRoute("/app")({
@@ -14,6 +15,7 @@ type NavItem = { to: string; label: string; icon: typeof LayoutDashboard; exact?
 const NAV: NavItem[] = [
   { to: "/app", label: "Dashboard", icon: LayoutDashboard, exact: true },
   { to: "/app/learn/lessons", label: "Lessons", icon: GraduationCap },
+  { to: "/app/activities", label: "Activities", icon: PartyPopper },
   { to: "/app/learn/text", label: "Text chat", icon: MessageSquare },
   { to: "/app/learn/voice", label: "Voice practice", icon: Mic },
   { to: "/app/learn/voice-call", label: "Voice call", icon: Phone },
@@ -82,6 +84,7 @@ function AuthLayout() {
                 <Button size="icon" variant="ghost"><Menu className="size-5" /></Button>
               </SheetTrigger>
               <SheetContent side="left" className="p-0 w-64 flex flex-col">
+                <VisuallyHidden><SheetTitle>Navigation</SheetTitle></VisuallyHidden>
                 <Link to="/app" onClick={() => setOpen(false)} className="flex items-center gap-2 font-bold text-xl px-5 py-5">
                   <Sparkles className="size-5 text-primary" /> Lingvo
                 </Link>
