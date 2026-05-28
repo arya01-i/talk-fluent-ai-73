@@ -2,7 +2,7 @@ import { createFileRoute, Link, useNavigate } from "@tanstack/react-router";
 import { useProfile } from "@/hooks/use-profile";
 import { Card } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
-import { MessageSquare, Mic, Phone, Video, BookOpen, ListChecks, Flame, Trophy, GraduationCap, Sparkles, Dice5, Music, Zap, Settings as SettingsIcon } from "lucide-react";
+import { MessageSquare, Mic, Phone, Video, BookOpen, ListChecks, Flame, Trophy, GraduationCap, Sparkles, Dice5, Music, Zap } from "lucide-react";
 import { useEffect, useState } from "react";
 import { supabase } from "@/integrations/supabase/client";
 
@@ -83,17 +83,18 @@ function Dashboard() {
   return (
     <div className="max-w-5xl mx-auto p-6 md:p-10 space-y-8">
       <div className="relative overflow-hidden rounded-2xl border bg-gradient-to-br from-primary/15 via-accent/10 to-background p-6 md:p-8">
-        <div className="flex items-start gap-4">
-          <div className="text-6xl md:text-7xl leading-none">{info.flag}</div>
+        {/* Floating cartoon mascots */}
+        <div className="pointer-events-none absolute -top-4 -right-2 text-5xl md:text-6xl rotate-12 opacity-90 animate-bounce" style={{ animationDuration: "3s" }}>🦊</div>
+        <div className="pointer-events-none absolute bottom-2 right-10 text-3xl md:text-4xl -rotate-6 animate-bounce" style={{ animationDuration: "4s", animationDelay: "0.5s" }}>🎈</div>
+        <div className="pointer-events-none absolute top-6 right-24 text-2xl animate-pulse">✨</div>
+        <div className="flex items-start gap-4 relative">
+          <div className="text-6xl md:text-7xl leading-none drop-shadow-lg">{info.flag}</div>
           <div className="flex-1 min-w-0">
             <p className="text-xs uppercase tracking-wider text-primary font-semibold">{info.tagline}</p>
             <h1 className="text-2xl md:text-4xl font-bold mt-1">{info.greeting} {profile.display_name ?? ""}</h1>
             <p className="text-muted-foreground mt-1">Your <span className="font-medium text-foreground">{profile.learning_lang}</span> journey · Level {profile.level}</p>
             <p className="mt-3 text-sm bg-accent/30 inline-block px-3 py-1 rounded-full">💡 {info.tip}</p>
           </div>
-          <Link to="/app/settings" className="hidden sm:inline-flex items-center gap-1 text-xs text-muted-foreground hover:text-foreground">
-            <SettingsIcon className="size-3.5" /> Change language
-          </Link>
         </div>
       </div>
 
