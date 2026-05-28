@@ -43,12 +43,12 @@ function WordMatchPage() {
     setWrong([]);
     setMoves(0);
     try {
-      const r = await generate({
+      const r = (await generate({
         data: { learningLang: profile.learning_lang, nativeLang: profile.native_lang, level: profile.level, kind: "pairs" },
-      });
+      })) as { pairs: Pair[] };
       setPairs(r.pairs);
       const t: Tile[] = shuffle(
-        r.pairs.flatMap((p, i) => [
+        r.pairs.flatMap((p: Pair, i: number) => [
           { id: `t-${i}`, pairId: i, text: p.target, side: "target" as const, matched: false },
           { id: `n-${i}`, pairId: i, text: p.native, side: "native" as const, matched: false },
         ]),
