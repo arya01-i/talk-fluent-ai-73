@@ -16,6 +16,10 @@ const ACTIVITIES = [
   { emoji: "🐨", name: "Coco's Karaoke", desc: "Repeat a phrase 3 times — match the rhythm.", to: "/app/learn/voice", color: "from-stone-500/20 to-amber-500/10" },
   { emoji: "🦄", name: "Luna's Video Avatar", desc: "Talk face-to-face with your animated tutor.", to: "/app/learn/video-call", color: "from-pink-500/20 to-purple-500/10" },
   { emoji: "🐯", name: "Tigger's Lesson", desc: "Jump into a structured lesson at your level.", to: "/app/learn/lessons", color: "from-orange-500/20 to-red-500/10" },
+  { emoji: "🐙", name: "Octo's Shadow Talk", desc: "Listen, then repeat — practice pronunciation out loud.", to: "/app/learn/voice", color: "from-violet-500/20 to-fuchsia-500/10" },
+  { emoji: "🐢", name: "Shelly's Daily Streak", desc: "Keep your fire alive with one quick lesson today.", to: "/app/learn/lessons", color: "from-lime-500/20 to-green-500/10" },
+  { emoji: "🦊", name: "Foxy's Flash Quiz", desc: "60-second pop quiz — how fast can you go?", to: "/app/quizzes", color: "from-rose-500/20 to-red-500/10" },
+  { emoji: "🐰", name: "Bunny's Word of the Day", desc: "Add one fresh word to your vocab list.", to: "/app/vocabulary", color: "from-pink-500/20 to-rose-500/10" },
 ];
 
 function ActivitiesPage() {

@@ -17,14 +17,22 @@ export function bcp47(language: string): string {
 }
 
 export function stripForSpeech(text: string): string {
-  const cleaned = text
+  // Take everything before the first ↳ marker (the native-language hint).
+  // Works whether the marker is on its own line or inline.
+  const beforeHint = text.split("↳")[0];
+  const cleaned = beforeHint
     .split(/\n+/)
-    .filter((l) => !l.trim().startsWith("↳"))
+    .map((l) => l.trim())
+    .filter(Boolean)
     .join(" ")
     .replace(/[*_`#>]/g, "")
     .trim();
-  // Skip if nothing meaningful left (e.g. just "?" or ".")
-  if (!/[\p{L}\p{N}]/u.test(cleaned)) return "";
+  // If filtering left us with only punctuation, fall back to the full text
+  // (minus the ↳ symbol) so the tutor never just says "?".
+  if (!/[\p{L}\p{N}]/u.test(cleaned)) {
+    const fallback = text.replace(/↳/g, " ").replace(/[*_`#>]/g, "").replace(/\s+/g, " ").trim();
+    return /[\p{L}\p{N}]/u.test(fallback) ? fallback : "";
+  }
   return cleaned;
 }
 
