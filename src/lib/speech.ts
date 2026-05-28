@@ -21,17 +21,60 @@ export function stripForSpeech(text: string): string {
   return text.split(/\n+/).filter((l) => !l.trim().startsWith("↳")).join(" ").replace(/[*_`#>]/g, "").trim();
 }
 
-export function speak(text: string, language: string, onEnd?: () => void) {
+const FEMALE_HINTS = /female|woman|girl|samantha|victoria|zira|tessa|karen|moira|fiona|susan|allison|ava|serena|google.*(female)|amelie|amelia|paulina|monica|luciana|joana|alice|anna|elena|katja|petra|yuna|mei|xiaoxiao|nadia|ines|sara|maria/i;
+const MALE_HINTS = /male|man|boy|daniel|alex|fred|tom|david|mark|guy|diego|jorge|carlos|paulo|hiroshi|kyoko|wei|yifan|ahmed|raj|ravi|google.*(male)|thomas|jorge|enrique/i;
+
+function pickVoice(lang: string, gender?: "female" | "male"): SpeechSynthesisVoice | undefined {
+  const voices = window.speechSynthesis.getVoices();
+  const base = lang.split("-")[0];
+  const matchLang = voices.filter((v) => v.lang === lang || v.lang.startsWith(base));
+  if (matchLang.length === 0) return undefined;
+  if (gender === "female") {
+    return (
+      matchLang.find((v) => FEMALE_HINTS.test(v.name)) ||
+      matchLang.find((v) => !MALE_HINTS.test(v.name)) ||
+      matchLang[0]
+    );
+  }
+  if (gender === "male") {
+    return (
+      matchLang.find((v) => MALE_HINTS.test(v.name)) ||
+      matchLang.find((v) => !FEMALE_HINTS.test(v.name)) ||
+      matchLang[0]
+    );
+  }
+  return matchLang[0];
+}
+
+function ensureVoices(): Promise<void> {
+  return new Promise((resolve) => {
+    if (typeof window === "undefined" || !("speechSynthesis" in window)) return resolve();
+    if (window.speechSynthesis.getVoices().length > 0) return resolve();
+    const t = setTimeout(() => resolve(), 800);
+    window.speechSynthesis.addEventListener(
+      "voiceschanged",
+      () => { clearTimeout(t); resolve(); },
+      { once: true } as any
+    );
+  });
+}
+
+export function speak(text: string, language: string, onEnd?: () => void, gender?: "female" | "male") {
   if (typeof window === "undefined" || !("speechSynthesis" in window)) { onEnd?.(); return; }
   window.speechSynthesis.cancel();
-  const u = new SpeechSynthesisUtterance(stripForSpeech(text));
-  u.lang = bcp47(language);
-  const voices = window.speechSynthesis.getVoices();
-  const v = voices.find((v) => v.lang === u.lang) || voices.find((v) => v.lang.startsWith(u.lang.split("-")[0]));
-  if (v) u.voice = v;
-  u.onend = () => onEnd?.();
-  u.onerror = () => onEnd?.();
-  window.speechSynthesis.speak(u);
+  const lang = bcp47(language);
+  const run = () => {
+    const u = new SpeechSynthesisUtterance(stripForSpeech(text));
+    u.lang = lang;
+    const v = pickVoice(lang, gender);
+    if (v) u.voice = v;
+    u.pitch = gender === "male" ? 0.85 : gender === "female" ? 1.15 : 1;
+    u.rate = 1;
+    u.onend = () => onEnd?.();
+    u.onerror = () => onEnd?.();
+    window.speechSynthesis.speak(u);
+  };
+  ensureVoices().then(run);
 }
 
 export function stopSpeaking() {

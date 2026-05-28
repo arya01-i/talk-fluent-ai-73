@@ -57,7 +57,12 @@ function VideoCallPage() {
       if (!activeRef.current) return;
       if (reply) {
         setStatus("Lingvo is speaking…"); setSpeaking(true);
-        speak(reply, profile.learning_lang, () => { setSpeaking(false); if (activeRef.current) loop(); });
+        speak(
+          reply,
+          profile.learning_lang,
+          () => { setSpeaking(false); if (activeRef.current) loop(); },
+          gender,
+        );
       } else { loop(); }
     };
     r.onerror = () => { if (activeRef.current) loop(); };
@@ -115,76 +120,160 @@ function VideoCallPage() {
 }
 
 function Avatar({ speaking, active, gender }: { speaking: boolean; active: boolean; gender: "female" | "male" }) {
-  const skin = "#f1c9a5";
-  const skinShade = "#d9a37f";
-  const hair = gender === "female" ? "#3a2418" : "#1f1410";
-  const lip = "#a14a4a";
+  const skinLight = "#fbd9b8";
+  const skin = "#f0c19a";
+  const skinShade = "#c98e6a";
+  const skinDeep = "#8b5a3c";
+  const hair = gender === "female" ? "#2a1610" : "#15100c";
+  const hairHi = gender === "female" ? "#5a3022" : "#2a1c14";
+  const lip = gender === "female" ? "#b85265" : "#9b5145";
+  const lipShade = gender === "female" ? "#7a2838" : "#5a2a22";
+  const eyeColor = "#3d2817";
+  const id = gender; // suffix to avoid SVG id collisions on re-render
   return (
-    <svg viewBox="0 0 220 240" className="w-64 h-64 drop-shadow-xl">
+    <svg viewBox="0 0 240 260" className="w-72 h-72 drop-shadow-2xl">
       <defs>
-        <radialGradient id="bg" cx="50%" cy="40%" r="70%">
-          <stop offset="0%" stopColor="oklch(0.96 0.04 80)" />
-          <stop offset="100%" stopColor="oklch(0.85 0.06 60)" />
+        <radialGradient id={`bg-${id}`} cx="50%" cy="35%" r="75%">
+          <stop offset="0%" stopColor="#ffe9d2" />
+          <stop offset="60%" stopColor="#f4c8a0" />
+          <stop offset="100%" stopColor="#a86b4a" />
         </radialGradient>
-        <linearGradient id="neck" x1="0" x2="0" y1="0" y2="1">
-          <stop offset="0%" stopColor={skin} />
+        <radialGradient id={`face-${id}`} cx="50%" cy="40%" r="65%">
+          <stop offset="0%" stopColor={skinLight} />
+          <stop offset="70%" stopColor={skin} />
           <stop offset="100%" stopColor={skinShade} />
+        </radialGradient>
+        <linearGradient id={`neck-${id}`} x1="0" x2="0" y1="0" y2="1">
+          <stop offset="0%" stopColor={skinShade} />
+          <stop offset="100%" stopColor={skinDeep} />
+        </linearGradient>
+        <radialGradient id={`iris-${id}`} cx="50%" cy="50%" r="50%">
+          <stop offset="0%" stopColor="#6b4226" />
+          <stop offset="70%" stopColor={eyeColor} />
+          <stop offset="100%" stopColor="#1a0e07" />
+        </radialGradient>
+        <linearGradient id={`hair-${id}`} x1="0" x2="0" y1="0" y2="1">
+          <stop offset="0%" stopColor={hairHi} />
+          <stop offset="100%" stopColor={hair} />
+        </linearGradient>
+        <linearGradient id={`shirt-${id}`} x1="0" x2="0" y1="0" y2="1">
+          <stop offset="0%" stopColor={gender === "female" ? "#c2546a" : "#2f4a7a"} />
+          <stop offset="100%" stopColor={gender === "female" ? "#7d2a3c" : "#16243f"} />
         </linearGradient>
       </defs>
-      <rect width="220" height="240" fill="url(#bg)" rx="20" />
-      {/* shoulders / shirt */}
-      <path d="M30 240 Q110 170 190 240 Z" fill={gender === "female" ? "#b35a4a" : "#2c3e60"} />
-      {/* neck */}
-      <rect x="92" y="160" width="36" height="34" rx="10" fill="url(#neck)" />
+
+      <rect width="240" height="260" fill={`url(#bg-${id})`} rx="24" />
+
+      {/* shoulders */}
+      <path d="M20 260 Q120 175 220 260 Z" fill={`url(#shirt-${id})`} />
+      <path d="M90 200 Q120 210 150 200 L155 230 Q120 240 85 230 Z" fill="rgba(255,255,255,0.08)" />
+
+      {/* neck with shadow */}
+      <path d="M100 170 L100 200 Q120 212 140 200 L140 170 Z" fill={`url(#neck-${id})`} />
+      <ellipse cx="120" cy="178" rx="22" ry="5" fill={skinDeep} opacity="0.35" />
+
       {/* hair back */}
       {gender === "female" ? (
-        <path d="M50 120 Q55 50 110 40 Q170 50 175 130 Q175 175 155 185 L150 130 Q110 110 70 130 L65 185 Q45 170 50 120 Z" fill={hair} />
+        <path d="M48 130 Q40 50 120 38 Q200 50 192 140 Q195 200 168 210 L162 140 Q120 118 78 140 L72 210 Q45 200 48 130 Z" fill={`url(#hair-${id})`} />
       ) : (
-        <path d="M60 110 Q65 55 110 50 Q160 55 165 115 L160 130 Q150 100 110 96 Q72 100 65 130 Z" fill={hair} />
+        <path d="M58 120 Q60 55 120 48 Q180 55 182 122 L176 140 Q160 108 120 102 Q78 108 64 140 Z" fill={`url(#hair-${id})`} />
       )}
+
       {/* face */}
-      <ellipse cx="110" cy="120" rx="48" ry="58" fill={skin} />
-      {/* cheeks */}
-      <ellipse cx="82" cy="138" rx="8" ry="5" fill="#e8a890" opacity="0.6" />
-      <ellipse cx="138" cy="138" rx="8" ry="5" fill="#e8a890" opacity="0.6" />
+      <ellipse cx="120" cy="128" rx="52" ry="64" fill={`url(#face-${id})`} />
+      {/* jaw shading */}
+      <path d="M72 138 Q78 188 120 198 Q162 188 168 138 Q160 178 120 188 Q80 178 72 138 Z" fill={skinShade} opacity="0.35" />
+      {/* forehead highlight */}
+      <ellipse cx="120" cy="92" rx="32" ry="14" fill="#fff2e0" opacity="0.35" />
+
+      {/* cheekbone blush */}
+      <ellipse cx="86" cy="148" rx="11" ry="6" fill="#e88a82" opacity="0.45" />
+      <ellipse cx="154" cy="148" rx="11" ry="6" fill="#e88a82" opacity="0.45" />
+
       {/* eyebrows */}
-      <path d="M76 104 Q90 98 100 104" stroke={hair} strokeWidth="3" fill="none" strokeLinecap="round" />
-      <path d="M120 104 Q130 98 144 104" stroke={hair} strokeWidth="3" fill="none" strokeLinecap="round" />
-      {/* eyes */}
-      <g>
-        <ellipse cx="88" cy="118" rx="7" ry="4.5" fill="white" />
-        <circle cx="88" cy="118" r="3.2" fill="#2a3a5a">
-          <animate attributeName="ry" values="3.2;0.2;3.2" dur="5s" repeatCount="indefinite" />
-        </circle>
-        <ellipse cx="132" cy="118" rx="7" ry="4.5" fill="white" />
-        <circle cx="132" cy="118" r="3.2" fill="#2a3a5a">
-          <animate attributeName="ry" values="3.2;0.2;3.2" dur="5s" repeatCount="indefinite" />
-        </circle>
-      </g>
-      {/* nose */}
-      <path d="M110 122 Q106 142 110 148 Q114 148 114 144" stroke={skinShade} strokeWidth="1.5" fill="none" strokeLinecap="round" />
-      {/* mouth */}
-      <g transform="translate(110 160)">
-        <ellipse cx="0" cy="0" rx={speaking ? 14 : 11} ry={speaking ? 7 : 2.2} fill={lip}>
-          {speaking && <animate attributeName="ry" values="2;7;3;6;2" dur="0.55s" repeatCount="indefinite" />}
-          {speaking && <animate attributeName="rx" values="11;14;12;14;11" dur="0.55s" repeatCount="indefinite" />}
-        </ellipse>
-        {speaking && <ellipse cx="0" cy="1" rx="6" ry="2" fill="#5a1f1f" opacity="0.6" />}
-      </g>
-      {/* female: front hair fringe */}
-      {gender === "female" && (
-        <path d="M65 95 Q90 70 110 80 Q135 70 158 100 Q140 92 120 100 Q100 92 80 102 Z" fill={hair} />
-      )}
-      {/* earrings for female */}
-      {gender === "female" && (
+      {gender === "female" ? (
         <>
-          <circle cx="62" cy="138" r="3" fill="oklch(0.85 0.15 85)" />
-          <circle cx="158" cy="138" r="3" fill="oklch(0.85 0.15 85)" />
+          <path d="M78 108 Q94 100 108 106" stroke={hair} strokeWidth="2.5" fill="none" strokeLinecap="round" />
+          <path d="M132 106 Q146 100 162 108" stroke={hair} strokeWidth="2.5" fill="none" strokeLinecap="round" />
+        </>
+      ) : (
+        <>
+          <path d="M76 108 Q94 100 110 108" stroke={hair} strokeWidth="4" fill="none" strokeLinecap="round" />
+          <path d="M130 108 Q146 100 164 108" stroke={hair} strokeWidth="4" fill="none" strokeLinecap="round" />
         </>
       )}
+
+      {/* eyes */}
+      <g>
+        {/* left */}
+        <ellipse cx="94" cy="124" rx="9" ry="5.5" fill="#fff" />
+        <ellipse cx="94" cy="124" rx="9" ry="5.5" fill="none" stroke={skinDeep} strokeWidth="0.8" />
+        <circle cx="94" cy="124" r="4.5" fill={`url(#iris-${id})`}>
+          <animate attributeName="r" values="4.5;0.4;4.5" keyTimes="0;0.5;1" dur="5s" repeatCount="indefinite" />
+        </circle>
+        <circle cx="95.5" cy="122.5" r="1.4" fill="#fff" />
+        {/* upper lash */}
+        <path d="M85 122 Q94 117 103 122" stroke={hair} strokeWidth="1.4" fill="none" strokeLinecap="round" />
+        {/* right */}
+        <ellipse cx="146" cy="124" rx="9" ry="5.5" fill="#fff" />
+        <ellipse cx="146" cy="124" rx="9" ry="5.5" fill="none" stroke={skinDeep} strokeWidth="0.8" />
+        <circle cx="146" cy="124" r="4.5" fill={`url(#iris-${id})`}>
+          <animate attributeName="r" values="4.5;0.4;4.5" keyTimes="0;0.5;1" dur="5s" repeatCount="indefinite" />
+        </circle>
+        <circle cx="147.5" cy="122.5" r="1.4" fill="#fff" />
+        <path d="M137 122 Q146 117 155 122" stroke={hair} strokeWidth="1.4" fill="none" strokeLinecap="round" />
+      </g>
+
+      {/* nose with subtle shading */}
+      <path d="M120 130 Q114 152 118 160 Q120 162 122 160 Q126 152 120 130" fill={skinShade} opacity="0.25" />
+      <path d="M115 158 Q120 162 125 158" stroke={skinShade} strokeWidth="1.2" fill="none" strokeLinecap="round" />
+      <ellipse cx="117" cy="159" rx="1.6" ry="1" fill={skinDeep} opacity="0.5" />
+      <ellipse cx="123" cy="159" rx="1.6" ry="1" fill={skinDeep} opacity="0.5" />
+
+      {/* mouth */}
+      <g transform="translate(120 174)">
+        {/* upper lip */}
+        <path
+          d={`M-14 0 Q-7 -4 0 -2 Q7 -4 14 0 Q7 ${speaking ? 6 : 2} 0 ${speaking ? 6 : 2} Q-7 ${speaking ? 6 : 2} -14 0 Z`}
+          fill={lip}
+        >
+          {speaking && (
+            <animate
+              attributeName="d"
+              values={`M-14 0 Q-7 -4 0 -2 Q7 -4 14 0 Q7 2 0 2 Q-7 2 -14 0 Z;M-14 0 Q-7 -6 0 -3 Q7 -6 14 0 Q7 9 0 9 Q-7 9 -14 0 Z;M-14 0 Q-7 -4 0 -2 Q7 -4 14 0 Q7 4 0 4 Q-7 4 -14 0 Z;M-14 0 Q-7 -7 0 -3 Q7 -7 14 0 Q7 10 0 10 Q-7 10 -14 0 Z;M-14 0 Q-7 -4 0 -2 Q7 -4 14 0 Q7 2 0 2 Q-7 2 -14 0 Z`}
+              dur="0.6s"
+              repeatCount="indefinite"
+            />
+          )}
+        </path>
+        {speaking && <ellipse cx="0" cy="2" rx="7" ry="3" fill={lipShade} />}
+        {/* cupid's bow highlight */}
+        <path d="M-3 -2 Q0 -1 3 -2" stroke="#fff" strokeWidth="0.6" fill="none" opacity="0.5" />
+      </g>
+
+      {/* female: front fringe */}
+      {gender === "female" && (
+        <path d="M62 102 Q92 70 120 86 Q150 70 178 108 Q156 98 132 106 Q120 100 108 106 Q84 98 62 102 Z" fill={`url(#hair-${id})`} />
+      )}
+      {/* male: subtle stubble */}
+      {gender === "male" && (
+        <path d="M78 168 Q120 192 162 168 Q160 186 120 198 Q80 186 78 168" fill={hair} opacity="0.18" />
+      )}
+
+      {/* earrings */}
+      {gender === "female" && (
+        <>
+          <circle cx="68" cy="150" r="3.2" fill="#f4d36a" />
+          <circle cx="68" cy="150" r="1" fill="#fff7d0" />
+          <circle cx="172" cy="150" r="3.2" fill="#f4d36a" />
+          <circle cx="172" cy="150" r="1" fill="#fff7d0" />
+        </>
+      )}
+
       {active && !speaking && (
-        <circle cx="110" cy="120" r="95" fill="none" stroke="oklch(0.65 0.18 35)" strokeWidth="2" opacity="0.35">
-          <animate attributeName="r" values="92;104;92" dur="2.4s" repeatCount="indefinite" />
+        <circle cx="120" cy="128" r="100" fill="none" stroke="oklch(0.72 0.22 340)" strokeWidth="2" opacity="0.4">
+          <animate attributeName="r" values="96;110;96" dur="2.4s" repeatCount="indefinite" />
+          <animate attributeName="opacity" values="0.5;0.1;0.5" dur="2.4s" repeatCount="indefinite" />
         </circle>
       )}
     </svg>
