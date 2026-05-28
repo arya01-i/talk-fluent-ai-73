@@ -5,8 +5,9 @@ import { useProfile } from "@/hooks/use-profile";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Card } from "@/components/ui/card";
-import { Send, Loader2 } from "lucide-react";
+import { Send, Loader2, Volume2, Square } from "lucide-react";
 import { toast } from "sonner";
+import { speak, stopSpeaking, hasSpeakableContent } from "@/lib/speech";
 
 export type Mode = "text" | "voice" | "voice_call" | "video_call";
 export type Msg = { role: "user" | "assistant"; content: string };
@@ -53,7 +54,17 @@ export function useTutor(mode: Mode) {
 
 export function MessageList({ messages, busy }: { messages: Msg[]; busy: boolean }) {
   const ref = useRef<HTMLDivElement>(null);
+  const { profile } = useProfile();
+  const [speakingIdx, setSpeakingIdx] = useState<number | null>(null);
   useEffect(() => { ref.current?.scrollTo({ top: ref.current.scrollHeight, behavior: "smooth" }); }, [messages, busy]);
+  useEffect(() => () => stopSpeaking(), []);
+  const toggleSpeak = (i: number, text: string) => {
+    if (speakingIdx === i) { stopSpeaking(); setSpeakingIdx(null); return; }
+    if (!profile || !hasSpeakableContent(text)) return;
+    stopSpeaking();
+    setSpeakingIdx(i);
+    speak(text, profile.learning_lang, () => setSpeakingIdx((cur) => (cur === i ? null : cur)));
+  };
   return (
     <div ref={ref} className="flex-1 overflow-y-auto space-y-3 p-4">
       {messages.length === 0 && (
@@ -62,7 +73,18 @@ export function MessageList({ messages, busy }: { messages: Msg[]; busy: boolean
       {messages.map((m, i) => (
         <div key={i} className={m.role === "user" ? "flex justify-end" : "flex justify-start"}>
           <Card className={`max-w-[80%] p-3 whitespace-pre-wrap text-sm ${m.role === "user" ? "bg-primary text-primary-foreground" : ""}`}>
-            {m.content}
+            <div>{m.content}</div>
+            {m.role === "assistant" && hasSpeakableContent(m.content) && (
+              <button
+                type="button"
+                onClick={() => toggleSpeak(i, m.content)}
+                className="mt-2 inline-flex items-center gap-1 text-xs text-muted-foreground hover:text-foreground transition-colors"
+                aria-label={speakingIdx === i ? "Stop" : "Listen"}
+              >
+                {speakingIdx === i ? <Square className="size-3.5" /> : <Volume2 className="size-3.5" />}
+                <span>{speakingIdx === i ? "Stop" : "Listen"}</span>
+              </button>
+            )}
           </Card>
         </div>
       ))}
